@@ -1,0 +1,1024 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>NDT Sketch</title><style>html{color-scheme:light}body{box-sizing:border-box;width:100%;margin:0;padding:18px;background:#f5f7f8}button{cursor:pointer}</style><script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script></head><body><div id="mt-sketch-ui" aria-label="Desain NDT Sketch Review">
+  <div class="mt-app">
+    <aside class="mt-sidebar">
+      <div class="mt-brand"><span class="mt-logomark"><i data-lucide="notebook-pen" aria-hidden="true"></i></span><span>NDT Sketch<span class="mt-brand-sub">TRAINING WORKSPACE</span></span></div>
+      <div class="mt-nav-label">PRAKTIKUM</div>
+      <nav aria-label="Tampilan aplikasi">
+        <button type="button" class="mt-nav cursor-interaction" data-view="peserta"><i data-lucide="pen-tool" aria-hidden="true"></i>Laporan peserta</button>
+        <button type="button" class="mt-nav cursor-interaction" data-view="kunci"><i data-lucide="key-round" aria-hidden="true"></i>Master Key</button>
+        <button type="button" class="mt-nav cursor-interaction" data-view="penguji"><i data-lucide="scan-line" aria-hidden="true"></i>Examination</button>
+      </nav>
+      <div class="mt-session-label">SESI TRAINING</div>
+      <div class="mt-session"><span class="mt-status-dot"></span>Practical Training<span id="mt-session-batch">Pilih batch training</span></div>
+      <div class="mt-sidebar-bottom"><span class="mt-avatar">AS</span><div>Adi Setiawan<small>Peserta · MT-024</small></div></div>
+    </aside>
+    <main class="mt-main">
+      <header class="mt-report-header"><h1>Practical Report (Sketch)</h1><span id="mt-breadcrumb" hidden>Laporan peserta</span></header>
+      <nav class="mt-role-tabs" aria-label="Pilih akses aplikasi">
+        <button type="button" class="cursor-interaction" data-role-tab="peserta" aria-pressed="true">Peserta</button>
+        <button type="button" class="cursor-interaction" data-role-tab="penguji" aria-pressed="false">Penguji</button>
+      </nav>
+      <div id="mt-content" class="mt-content"></div>
+      <div id="mt-announcement" class="mt-toast" role="status" aria-live="polite" hidden></div>
+    </main>
+  </div>
+  <input id="mt-file" type="file" accept="image/jpeg,image/png" hidden>
+  <input id="mt-camera" type="file" accept="image/*" capture="environment" hidden>
+</div>
+<style>
+#mt-sketch-ui{--mt-bg:#f5f7f8;--mt-paper:#ffffff;--mt-ink:#172e35;--mt-muted:#64767c;--mt-line:#dfe7e9;--mt-soft:#edf3f4;--mt-accent:#0d746e;--mt-accent-ink:#ffffff;--mt-tint:#e6f3f0;--mt-orange:#bf6b19;--mt-orange-bg:#fff3e7;--mt-blue:#2777a4;--mt-red:#b64b4d;--mt-red-bg:#fcf0ef;--mt-radius:12px;font-family:"Segoe UI",Arial,sans-serif;color:var(--mt-ink);font-size:14px;line-height:1.5;width:100%;color-scheme:light}
+#mt-sketch-ui *{box-sizing:border-box}
+#mt-sketch-ui [hidden]{display:none!important}
+#mt-sketch-ui button,#mt-sketch-ui input,#mt-sketch-ui select,#mt-sketch-ui textarea{font:inherit}
+#mt-sketch-ui button{color:inherit}
+#mt-sketch-ui button:disabled{opacity:.5;cursor:not-allowed}
+#mt-sketch-ui h1,#mt-sketch-ui h2,#mt-sketch-ui h3,#mt-sketch-ui p{margin:0}
+#mt-sketch-ui h1{font-size:28px;line-height:1.2;font-weight:600;letter-spacing:-.8px}
+#mt-sketch-ui h2{font-size:15px;font-weight:600;letter-spacing:-.2px}
+#mt-sketch-ui h3{font-size:14px;font-weight:600}
+#mt-sketch-ui .mt-app{display:grid;grid-template-columns:176px minmax(0,1fr);background:var(--mt-bg);min-height:860px;border:1px solid var(--mt-line);border-radius:16px;overflow:clip}
+#mt-sketch-ui .mt-sidebar{background:var(--mt-paper);border-right:1px solid var(--mt-line);padding:27px 13px 18px;display:flex;flex-direction:column}
+#mt-sketch-ui .mt-brand{display:flex;gap:9px;align-items:center;font-size:17px;font-weight:650;letter-spacing:-.5px;padding:0 2px}
+#mt-sketch-ui .mt-logomark{width:32px;height:36px;background:var(--mt-accent);color:var(--mt-accent-ink);display:grid;place-items:center;border-radius:9px}
+#mt-sketch-ui .mt-logomark svg{width:20px;height:20px}
+#mt-sketch-ui .mt-brand-sub{display:block;font-size:8px;letter-spacing:1.25px;font-weight:600;color:var(--mt-muted);margin-top:3px}
+#mt-sketch-ui .mt-nav-label,#mt-sketch-ui .mt-session-label{font-size:10px;color:var(--mt-muted);letter-spacing:1.5px;font-weight:600;margin:42px 12px 10px}
+#mt-sketch-ui .mt-nav{width:100%;border:0;background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 10px;border-radius:8px;margin-bottom:5px;font-size:12px;white-space:nowrap;color:var(--mt-muted)}
+#mt-sketch-ui .mt-nav svg{width:17px;height:17px;flex-shrink:0}
+#mt-sketch-ui .mt-nav[aria-current="page"]{background:var(--mt-tint);color:var(--mt-accent);font-weight:650}
+#mt-sketch-ui .mt-nav:hover{background:var(--mt-soft)}
+#mt-sketch-ui .mt-session-label{margin-top:30px}
+#mt-sketch-ui .mt-session{padding:0 12px;font-size:11px;font-weight:600}
+#mt-sketch-ui .mt-session>span:last-child{display:block;margin:5px 0 0 12px;font-weight:400;color:var(--mt-muted)}
+#mt-sketch-ui .mt-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mt-accent);margin-right:6px}
+#mt-sketch-ui .mt-sidebar-bottom{display:flex;gap:9px;align-items:center;margin-top:auto;padding-top:35px;font-size:11px}
+#mt-sketch-ui .mt-sidebar-bottom small{display:block;font-size:10px;color:var(--mt-muted);margin-top:2px}
+#mt-sketch-ui .mt-avatar{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--mt-soft);font-weight:600}
+#mt-sketch-ui .mt-main{position:relative;min-width:0}
+#mt-sketch-ui .mt-topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 25px;min-height:62px;background:var(--mt-paper);border-bottom:1px solid var(--mt-line);font-size:11px;color:var(--mt-muted)}
+#mt-sketch-ui .mt-slash{margin:0 9px;color:var(--mt-line)}
+#mt-sketch-ui .mt-demo{white-space:nowrap;font-size:9px;letter-spacing:1px;border:1px solid var(--mt-line);padding:4px 7px;border-radius:4px;color:var(--mt-muted);margin-right:75px}
+#mt-sketch-ui .mt-content{padding:25px}
+#mt-sketch-ui .mt-page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:21px}
+#mt-sketch-ui .mt-eyebrow{font-size:10px;letter-spacing:1.5px;font-weight:600;color:var(--mt-accent);margin-bottom:7px}
+#mt-sketch-ui .mt-subtitle{font-size:12px;color:var(--mt-muted);margin-top:8px}
+#mt-sketch-ui .mt-badge{display:inline-flex;gap:5px;align-items:center;font-size:10px;font-weight:600;padding:4px 8px;border-radius:5px;background:var(--mt-soft);color:var(--mt-muted);white-space:nowrap}
+#mt-sketch-ui .mt-badge.warm{color:var(--mt-orange);background:var(--mt-orange-bg)}
+#mt-sketch-ui .mt-badge.good{color:var(--mt-accent);background:var(--mt-tint)}
+#mt-sketch-ui .mt-badge.red{color:var(--mt-red);background:var(--mt-red-bg)}
+#mt-sketch-ui .mt-meta{display:flex;flex-wrap:wrap;gap:16px 26px;border-top:1px solid var(--mt-line);border-bottom:1px solid var(--mt-line);padding:14px 0;margin-bottom:20px}
+#mt-sketch-ui .mt-meta-item{min-width:80px}
+#mt-sketch-ui .mt-meta-item span{display:block;color:var(--mt-muted);font-size:10px;margin-bottom:4px}
+#mt-sketch-ui .mt-meta-item strong{font-weight:600;font-size:12px}
+#mt-sketch-ui .mt-mono{font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;font-variant-numeric:tabular-nums}
+#mt-sketch-ui .mt-editor-layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;align-items:start;gap:15px}
+#mt-sketch-ui .mt-box{background:var(--mt-paper);border:1px solid var(--mt-line);border-radius:var(--mt-radius);min-width:0;overflow:hidden}
+#mt-sketch-ui .mt-box-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 16px;border-bottom:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-caption{font-size:11px;color:var(--mt-muted)}
+#mt-sketch-ui .mt-btn{border:1px solid var(--mt-line);border-radius:7px;background:var(--mt-paper);display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 11px;min-height:34px;font-size:11px;font-weight:600;white-space:nowrap}
+#mt-sketch-ui .mt-btn svg{width:14px;height:14px;flex-shrink:0}
+#mt-sketch-ui .mt-btn:hover{background:var(--mt-soft)}
+#mt-sketch-ui .mt-btn.mt-primary{background:var(--mt-accent);border-color:var(--mt-accent);color:var(--mt-accent-ink)}
+#mt-sketch-ui .mt-btn.mt-quiet{background:transparent;border-color:transparent;color:var(--mt-muted)}
+#mt-sketch-ui .mt-btn.mt-danger{color:var(--mt-red)}
+#mt-sketch-ui .mt-btn.mt-wide{width:100%}
+#mt-sketch-ui .mt-icon-btn{padding:8px;min-width:34px}
+#mt-sketch-ui .mt-canvas-toolbar{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;gap:6px}
+#mt-sketch-ui .mt-tool-group{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+#mt-sketch-ui .mt-canvas{background:var(--mt-paper);position:relative;padding:8px 8px 0}
+#mt-sketch-ui .mt-sketch{display:block;width:100%;height:auto;aspect-ratio:760/440;user-select:none;overflow:visible}
+#mt-sketch-ui .mt-sketch[data-drawing="true"]{touch-action:none;cursor:crosshair}
+#mt-sketch-ui .mt-grid-dot{fill:var(--mt-line)}
+#mt-sketch-ui .mt-plate{fill:var(--mt-paper);stroke:var(--mt-muted);stroke-width:1.3}
+#mt-sketch-ui .mt-weld{fill:var(--mt-soft);stroke:var(--mt-muted);stroke-width:1.1}
+#mt-sketch-ui .mt-centerline{stroke:var(--mt-muted);stroke-width:1;stroke-dasharray:12 4 2 4}
+#mt-sketch-ui .mt-guide{stroke:var(--mt-line);stroke-width:1}
+#mt-sketch-ui .mt-piece-label{fill:#163bb6;font-family:"Cascadia Code",Consolas,monospace;font-weight:700;pointer-events:none}
+#mt-sketch-ui .mt-piece-rows{display:grid;gap:0;margin-top:10px;border:1px solid var(--mt-line);border-radius:10px;overflow:hidden}
+#mt-sketch-ui .mt-piece-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;padding:6px 12px;border-bottom:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-piece-row:last-child{border-bottom:0}
+#mt-sketch-ui .mt-piece-row strong{font-size:13px;overflow-wrap:anywhere}
+#mt-sketch-ui .mt-piece-row .mt-btn{padding:6px 10px;min-height:34px}
+#mt-sketch-ui .mt-piece-key-grid{display:grid;grid-template-columns:38px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:stretch}
+#mt-sketch-ui .mt-piece-key-slot{padding:10px;border:1px solid var(--mt-line);border-radius:8px;min-width:0}
+#mt-sketch-ui .mt-piece-key-slot .mt-tool-group{flex-wrap:wrap;margin-top:8px;gap:5px}
+#mt-sketch-ui .mt-piece-key-slot .mt-btn{padding:6px 8px;font-size:11px;min-height:36px}
+@media(max-width:720px){#mt-sketch-ui .mt-piece-row .mt-btn{min-height:44px}#mt-sketch-ui .mt-piece-key-grid{grid-template-columns:24px minmax(0,1fr) minmax(0,1fr);gap:6px}#mt-sketch-ui .mt-piece-key-slot{padding:8px}#mt-sketch-ui .mt-piece-key-slot .mt-btn{min-height:44px}#mt-sketch-ui .mt-piece-key-slot .mt-badge{white-space:normal}}
+#mt-sketch-ui .mt-diagram-text{fill:var(--mt-muted);font-family:"Cascadia Code",Consolas,monospace}
+#mt-sketch-ui .mt-ind-stroke{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:3.2;vector-effect:non-scaling-stroke}
+#mt-sketch-ui .mt-ind-label{font-family:"Segoe UI",Arial,sans-serif;font-weight:650;fill:var(--mt-paper)}
+#mt-sketch-ui .mt-canvas-note{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;font-size:10px;color:var(--mt-muted);border-top:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-canvas-note span:first-child{display:flex;align-items:center;gap:6px}
+#mt-sketch-ui .mt-canvas-note svg{width:13px;height:13px}
+#mt-sketch-ui .mt-draw-note{background:var(--mt-tint);color:var(--mt-accent);padding:8px 14px;font-size:11px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+#mt-sketch-ui .mt-indication-list{margin-top:16px}
+#mt-sketch-ui .mt-list-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+#mt-sketch-ui .mt-counter{background:var(--mt-soft);border-radius:4px;padding:2px 5px;font-size:10px;color:var(--mt-muted);margin-left:5px}
+#mt-sketch-ui .mt-table-wrap{overflow-x:auto;border:1px solid var(--mt-line);border-radius:9px;background:var(--mt-paper)}
+#mt-sketch-ui table{border-collapse:collapse;width:100%;font-size:11px;white-space:nowrap}
+#mt-sketch-ui th{font-weight:500;color:var(--mt-muted);background:var(--mt-soft);text-align:left;font-size:10px;padding:9px 9px}
+#mt-sketch-ui td{padding:10px 9px;border-top:1px solid var(--mt-line);font-variant-numeric:tabular-nums}
+#mt-sketch-ui tr.mt-selected td{background:var(--mt-tint)}
+#mt-sketch-ui .mt-number{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--mt-soft);border:0;font-weight:600;font-size:11px}
+#mt-sketch-ui tr.mt-selected .mt-number{background:var(--mt-accent);color:var(--mt-accent-ink)}
+#mt-sketch-ui .mt-row-edit{border:0;background:transparent;padding:0;display:flex;align-items:center;gap:5px;color:var(--mt-accent)}
+#mt-sketch-ui .mt-empty{padding:28px 15px;text-align:center;color:var(--mt-muted);font-size:12px}
+#mt-sketch-ui .mt-form{padding:14px}
+#mt-sketch-ui .mt-form-heading{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:14px}
+#mt-sketch-ui .mt-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px 9px}
+#mt-sketch-ui .mt-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:11px;color:var(--mt-muted)}
+#mt-sketch-ui .mt-field.full{grid-column:1/-1}
+#mt-sketch-ui .mt-field input,#mt-sketch-ui .mt-field select,#mt-sketch-ui .mt-field textarea,#mt-sketch-ui .mt-pair-select{width:100%;border:1px solid var(--mt-line);border-radius:6px;background:var(--mt-paper);color:var(--mt-ink);padding:9px 10px;min-width:0;font-size:12px}
+#mt-sketch-ui .mt-field textarea{resize:vertical;min-height:70px}
+#mt-sketch-ui .mt-input-unit{position:relative}
+#mt-sketch-ui .mt-input-unit input{padding-right:32px;font-variant-numeric:tabular-nums}
+#mt-sketch-ui .mt-input-unit>span{position:absolute;right:10px;top:10px;font-size:10px;color:var(--mt-muted);pointer-events:none}
+#mt-sketch-ui .mt-choices{display:flex;gap:5px}
+#mt-sketch-ui .mt-choice{flex:1;display:flex;gap:5px;align-items:center;justify-content:center;border:1px solid var(--mt-line);border-radius:6px;padding:9px 4px;font-size:11px;color:var(--mt-ink);background:var(--mt-paper)}
+#mt-sketch-ui .mt-choice input{width:12px!important;min-height:0!important;margin:0;accent-color:var(--mt-accent)}
+#mt-sketch-ui .mt-choice:has(input:checked){border-color:var(--mt-accent);background:var(--mt-tint);color:var(--mt-accent)}
+#mt-sketch-ui .mt-choice.reject:has(input:checked){border-color:var(--mt-red);background:var(--mt-red-bg);color:var(--mt-red)}
+#mt-sketch-ui .mt-form-actions{display:flex;gap:5px;margin-top:14px;flex-wrap:wrap}
+#mt-sketch-ui .mt-form-actions>.mt-primary{flex:1}
+#mt-sketch-ui .mt-error{font-size:11px;color:var(--mt-red);margin-top:10px}
+#mt-sketch-ui .mt-photo-box{margin-top:14px;padding:14px}
+#mt-sketch-ui .mt-photo-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:6px}
+#mt-sketch-ui .mt-photo-placeholder{background:var(--mt-soft);border:1px dashed var(--mt-line);border-radius:8px;padding:18px 10px;text-align:center;color:var(--mt-muted)}
+#mt-sketch-ui .mt-photo-placeholder>svg{width:24px;height:24px;margin:auto auto 7px;display:block}
+#mt-sketch-ui .mt-photo-placeholder p{font-size:11px}
+#mt-sketch-ui .mt-photo-placeholder small{display:block;font-size:10px;margin-top:3px}
+#mt-sketch-ui .mt-photo-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+#mt-sketch-ui .mt-photo-actions .mt-btn{flex:1;font-size:10px;padding:7px}
+#mt-sketch-ui .mt-photo-image{border-radius:7px;display:block;max-height:190px;object-fit:contain;width:100%;background:var(--mt-soft)}
+#mt-sketch-ui .mt-full-photo .mt-photo-image{max-height:none}
+#mt-sketch-ui .mt-bottom-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-bottom-actions .mt-btn{min-height:38px}
+#mt-sketch-ui .mt-bottom-actions .mt-caption{display:flex;align-items:center;gap:5px}
+#mt-sketch-ui .mt-bottom-actions .mt-caption svg{width:13px;height:13px}
+#mt-sketch-ui .mt-no-ind{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--mt-muted);margin-top:12px}
+#mt-sketch-ui .mt-no-ind input{accent-color:var(--mt-accent)}
+#mt-sketch-ui .mt-review-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 12px}
+#mt-sketch-ui .mt-segment{display:flex;border:1px solid var(--mt-line);background:var(--mt-paper);padding:3px;border-radius:8px;gap:3px}
+#mt-sketch-ui .mt-segment button{background:transparent;border:0;padding:7px 10px;font-size:11px;border-radius:5px;display:flex;align-items:center;gap:5px;color:var(--mt-muted)}
+#mt-sketch-ui .mt-segment button svg{width:14px;height:14px}
+#mt-sketch-ui .mt-segment button[aria-pressed="true"]{background:var(--mt-ink);color:var(--mt-paper)}
+#mt-sketch-ui .mt-comparison{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+#mt-sketch-ui .mt-review-card .mt-box-head{padding:12px 14px}
+#mt-sketch-ui .mt-legend{display:flex;gap:14px;font-size:10px;color:var(--mt-muted);align-items:center}
+#mt-sketch-ui .mt-swatch{display:inline-block;width:16px;height:3px;background:var(--mt-blue);margin-right:5px;vertical-align:middle}
+#mt-sketch-ui .mt-swatch.student{background:var(--mt-orange)}
+#mt-sketch-ui .mt-overlay-controls{display:flex;gap:12px;align-items:center;font-size:11px;padding:10px 15px;border-top:1px solid var(--mt-line);color:var(--mt-muted)}
+#mt-sketch-ui .mt-overlay-controls input{accent-color:var(--mt-accent);max-width:150px;width:100%}
+#mt-sketch-ui .mt-photo-review{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:14px}
+#mt-sketch-ui .mt-photo-review .mt-photo-box{margin:0}
+#mt-sketch-ui details.mt-photo-details{margin-top:13px}
+#mt-sketch-ui .mt-photo-details summary{font-size:11px;color:var(--mt-muted);padding:8px 0}
+#mt-sketch-ui .mt-review-table{margin-top:22px}
+#mt-sketch-ui .mt-review-table .mt-pair-select{font-size:10px;padding:6px;min-width:86px}
+#mt-sketch-ui .mt-review-table th{font-size:10px}
+#mt-sketch-ui .mt-review-table td{font-size:11px;vertical-align:top}
+#mt-sketch-ui .mt-delta{font-size:10px;display:block;color:var(--mt-muted);margin-top:4px}
+#mt-sketch-ui .mt-delta.different{color:var(--mt-orange)}
+#mt-sketch-ui .mt-review-summary{display:flex;gap:17px;font-size:11px;margin:12px 0;color:var(--mt-muted);flex-wrap:wrap}
+#mt-sketch-ui .mt-review-summary strong{color:var(--mt-ink);font-weight:600}
+#mt-sketch-ui .mt-evaluation{padding:18px;margin-top:21px}
+#mt-sketch-ui .mt-evaluation-grid{display:grid;grid-template-columns:190px 1fr;gap:18px;margin-top:15px}
+#mt-sketch-ui .mt-feedback-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px}
+#mt-sketch-ui .mt-feedback-actions .mt-no-ind{margin:0}
+#mt-sketch-ui .mt-toast{position:relative;margin:0 25px 18px;padding:12px 15px;border-radius:8px;background:var(--mt-tint);color:var(--mt-accent);font-size:12px;border:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-mobile-nav{display:none}
+#mt-sketch-ui.mt-phone{max-width:420px;margin-inline:auto}
+#mt-sketch-ui.mt-phone .mt-app{grid-template-columns:minmax(0,1fr)}
+#mt-sketch-ui.mt-phone .mt-sidebar{display:none}
+#mt-sketch-ui.mt-phone .mt-content{padding:18px 14px}
+#mt-sketch-ui.mt-phone .mt-topbar{padding:14px;font-size:10px}
+#mt-sketch-ui.mt-phone .mt-demo{margin-right:0}
+#mt-sketch-ui.mt-phone .mt-mobile-nav{display:flex}
+#mt-sketch-ui.mt-phone .mt-editor-layout{grid-template-columns:minmax(0,1fr)}
+#mt-sketch-ui.mt-phone .mt-page-head{align-items:flex-start}
+#mt-sketch-ui.mt-phone h1{font-size:24px}
+#mt-sketch-ui.mt-phone .mt-comparison,#mt-sketch-ui.mt-phone .mt-evaluation-grid,#mt-sketch-ui.mt-phone .mt-photo-review{grid-template-columns:minmax(0,1fr)}
+#mt-sketch-ui.mt-phone .mt-bottom-actions,#mt-sketch-ui.mt-phone .mt-feedback-actions{flex-wrap:wrap}
+#mt-sketch-ui.mt-phone .mt-bottom-actions>.mt-tool-group{width:100%;justify-content:flex-end}
+#mt-sketch-ui .mt-mobile-nav{background:var(--mt-paper);border-bottom:1px solid var(--mt-line);padding:6px 10px;gap:4px}
+#mt-sketch-ui .mt-mobile-nav button{flex:1;padding:10px 5px;background:transparent;border:0;border-radius:6px;font-size:11px;color:var(--mt-muted)}
+#mt-sketch-ui .mt-mobile-nav button[aria-current="page"]{color:var(--mt-accent);background:var(--mt-tint);font-weight:600}
+@media(max-width:800px){#mt-sketch-ui .mt-app{grid-template-columns:minmax(0,1fr)}#mt-sketch-ui .mt-sidebar{display:none}#mt-sketch-ui .mt-mobile-nav{display:flex}#mt-sketch-ui .mt-demo{margin-right:75px}}
+@media(max-width:600px){#mt-sketch-ui .mt-content{padding:18px 14px}#mt-sketch-ui .mt-topbar{padding:14px;font-size:10px}#mt-sketch-ui .mt-demo{margin-right:0;font-size:8px}#mt-sketch-ui h1{font-size:24px}#mt-sketch-ui .mt-page-head{align-items:flex-start}#mt-sketch-ui .mt-editor-layout,#mt-sketch-ui .mt-comparison,#mt-sketch-ui .mt-photo-review,#mt-sketch-ui .mt-evaluation-grid{grid-template-columns:minmax(0,1fr)}#mt-sketch-ui .mt-bottom-actions,#mt-sketch-ui .mt-feedback-actions{flex-wrap:wrap}#mt-sketch-ui .mt-bottom-actions>.mt-tool-group{width:100%;justify-content:flex-end}#mt-sketch-ui .mt-meta{gap:12px 22px}#mt-sketch-ui .mt-toast{margin-inline:14px}}
+@media(pointer:coarse){#mt-sketch-ui .mt-btn,#mt-sketch-ui .mt-mobile-nav button,#mt-sketch-ui .mt-choice,#mt-sketch-ui .mt-segment button{min-height:44px}#mt-sketch-ui .mt-field input,#mt-sketch-ui .mt-field select,#mt-sketch-ui .mt-field textarea{font-size:16px}#mt-sketch-ui .mt-number{width:36px;height:36px}#mt-sketch-ui .mt-pair-select{min-height:44px;font-size:16px}}
+
+#mt-sketch-ui .mt-detail-dialog{border:1px solid var(--mt-line);border-radius:14px;padding:0;background:var(--mt-paper);color:var(--mt-ink);width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;box-shadow:0 18px 65px #172e3530;color-scheme:light}
+#mt-sketch-ui .mt-detail-dialog::backdrop{background:rgb(14 30 36 / .55)}
+#mt-sketch-ui .mt-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px;border-bottom:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-dialog-head p{font-size:12px;color:var(--mt-muted);margin-top:4px}
+#mt-sketch-ui .mt-dialog-body>.mt-box{border:0;border-radius:0}
+#mt-sketch-ui .mt-detail-dialog .mt-field input,#mt-sketch-ui .mt-detail-dialog .mt-field textarea,#mt-sketch-ui .mt-detail-dialog .mt-choice{font-size:16px}
+#mt-sketch-ui .mt-detail-dialog .mt-btn{min-height:44px}
+
+/* Contain intrinsic table/input widths so one narrow grid track cannot widen the page. */
+#mt-sketch-ui,#mt-sketch-ui .mt-app,#mt-sketch-ui .mt-content,#mt-sketch-ui .mt-editor-layout,#mt-sketch-ui .mt-editor-layout>*,#mt-sketch-ui .mt-fields,#mt-sketch-ui .mt-input-unit{min-width:0;max-width:100%}
+#mt-sketch-ui .mt-table-wrap{width:100%;min-width:0;max-width:100%}
+#mt-sketch-ui .mt-field input,#mt-sketch-ui .mt-field select,#mt-sketch-ui .mt-field textarea{max-width:100%;box-sizing:border-box}
+#mt-sketch-ui .mt-tool-group,#mt-sketch-ui .mt-choice{min-width:0;max-width:100%}
+#mt-sketch-ui .mt-btn{max-width:100%}
+#mt-sketch-ui .mt-indication-cards{display:none}
+#mt-sketch-ui .mt-indication-card{background:var(--mt-paper);border:1px solid var(--mt-line);border-radius:10px;padding:12px;min-width:0}
+#mt-sketch-ui .mt-indication-card.mt-selected{border-color:var(--mt-accent);background:var(--mt-tint)}
+#mt-sketch-ui .mt-indication-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+#mt-sketch-ui .mt-indication-card-title{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px}
+#mt-sketch-ui .mt-indication-card-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
+#mt-sketch-ui .mt-indication-card-values div{min-width:0;overflow-wrap:anywhere}
+#mt-sketch-ui .mt-indication-card-values dt{font-size:11px;color:var(--mt-muted);margin-bottom:4px}
+#mt-sketch-ui .mt-indication-card-values dd{margin:0;font-size:13px}
+@media(max-width:600px){
+  body{padding:8px}
+  #mt-sketch-ui .mt-editor-layout,#mt-sketch-ui .mt-fields,#mt-sketch-ui .mt-evaluation-grid{grid-template-columns:minmax(0,1fr)}
+  #mt-sketch-ui .mt-editor-layout>*,#mt-sketch-ui .mt-content>*,#mt-sketch-ui .mt-page-head>*,#mt-sketch-ui .mt-topbar>*{min-width:0}
+  #mt-sketch-ui .mt-topbar,#mt-sketch-ui .mt-page-head,#mt-sketch-ui .mt-box-head,#mt-sketch-ui .mt-list-head,#mt-sketch-ui .mt-canvas-toolbar,#mt-sketch-ui .mt-canvas-note,#mt-sketch-ui .mt-dialog-head{flex-wrap:wrap}
+  #mt-sketch-ui .mt-topbar{gap:6px}
+  #mt-sketch-ui .mt-content{padding:16px 12px}
+  #mt-sketch-ui .mt-eyebrow{letter-spacing:1px;overflow-wrap:anywhere}
+  #mt-sketch-ui .mt-btn{min-height:44px;white-space:normal;overflow-wrap:anywhere}
+  #mt-sketch-ui .mt-canvas-toolbar{align-items:flex-start}
+  #mt-sketch-ui .mt-canvas-toolbar>.mt-tool-group{width:100%;justify-content:flex-start}
+  #mt-sketch-ui .mt-canvas-toolbar .mt-btn{flex:1 1 auto}
+  #mt-sketch-ui .mt-fields input,#mt-sketch-ui .mt-fields select,#mt-sketch-ui .mt-fields textarea{font-size:16px}
+  #mt-sketch-ui .mt-choices{width:100%}
+  #mt-sketch-ui .mt-choice{flex:1 1 0;min-height:44px}
+  #mt-sketch-ui .mt-desktop-indications{display:none}
+  #mt-sketch-ui .mt-indication-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+  #mt-sketch-ui .mt-indication-card-head .mt-btn{min-width:84px}
+  #mt-sketch-ui .mt-form-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  #mt-sketch-ui .mt-form-actions>.mt-primary{grid-column:1/-1}
+  #mt-sketch-ui .mt-bottom-actions,#mt-sketch-ui .mt-feedback-actions{display:grid;grid-template-columns:minmax(0,1fr)}
+  #mt-sketch-ui .mt-bottom-actions>.mt-tool-group{display:grid;grid-template-columns:minmax(0,1fr)}
+  #mt-sketch-ui .mt-bottom-actions .mt-btn,#mt-sketch-ui .mt-feedback-actions>.mt-btn{width:100%}
+  #mt-sketch-ui .mt-detail-dialog{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}
+}
+
+#mt-sketch-ui .mt-bottom-tabs,#mt-sketch-ui .mt-send-summary{display:none}
+@media(max-width:600px){
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-main{padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-content{display:flex;flex-direction:column}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-page-head{order:-1}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-app{min-height:calc(100vh - 16px);min-height:calc(100dvh - 16px)}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-meta,#mt-sketch-ui[data-mobile-layout="tabs"] .mt-inline-details{display:none}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-editor-layout,#mt-sketch-ui[data-mobile-layout="tabs"] .mt-editor-layout>div,#mt-sketch-ui[data-mobile-layout="tabs"] .mt-editor-layout>aside{display:contents}
+  #mt-sketch-ui[data-mobile-layout="tabs"] [data-mobile-pane]{display:none}
+  #mt-sketch-ui[data-mobile-layout="tabs"][data-mobile-tab="identity"] [data-mobile-pane="identity"],
+  #mt-sketch-ui[data-mobile-layout="tabs"][data-mobile-tab="sketch"] [data-mobile-pane="sketch"],
+  #mt-sketch-ui[data-mobile-layout="tabs"][data-mobile-tab="indications"] [data-mobile-pane="indications"],
+  #mt-sketch-ui[data-mobile-layout="tabs"][data-mobile-tab="photo"] [data-mobile-pane="photo"],
+  #mt-sketch-ui[data-mobile-layout="tabs"][data-mobile-tab="send"] [data-mobile-pane="send"]{display:block}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-bottom-tabs{position:fixed;z-index:20;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:var(--mt-paper);border-top:1px solid var(--mt-line);padding:7px 4px calc(7px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 18px #172e350b}
+  #mt-sketch-ui .mt-bottom-tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:52px;border:0;background:transparent;border-radius:9px;color:var(--mt-muted);font-size:11px;padding:5px 2px}
+  #mt-sketch-ui .mt-bottom-tabs button svg{width:20px;height:20px}
+  #mt-sketch-ui .mt-bottom-tabs button[aria-current="page"]{color:var(--mt-accent);background:var(--mt-tint);font-weight:600}
+  #mt-sketch-ui .mt-send-summary dt{color:var(--mt-muted);font-size:12px;margin-top:12px}
+  #mt-sketch-ui .mt-send-summary dd{margin:3px 0 0;overflow-wrap:anywhere}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-photo-box,#mt-sketch-ui[data-mobile-layout="tabs"] .mt-indication-list{margin-top:0}
+  #mt-sketch-ui[data-mobile-layout="tabs"] .mt-subtitle{display:none}
+  #mt-sketch-ui[data-mobile-layout="tabs"] h1{font-size:22px}
+}
+
+#mt-sketch-ui .mt-role-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:10px 16px;background:var(--mt-paper);border-bottom:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-role-tabs button{min-height:44px;padding:10px;border:0;border-radius:8px;background:transparent;color:var(--mt-muted);font-weight:600;font-size:14px}
+#mt-sketch-ui .mt-role-tabs button[aria-pressed="true"]{background:var(--mt-tint);color:var(--mt-accent)}
+@media(max-width:720px){
+#mt-sketch-ui .mt-reviewer-sections{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px!important;position:sticky;top:0;z-index:15;background:var(--mt-paper);padding:6px 0;border-bottom:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-reviewer-sections .mt-btn{min-height:44px;padding:8px 4px;font-size:11px;justify-content:center}
+#mt-sketch-ui #mt-content[data-reviewer-swipe="true"]{touch-action:pan-y pinch-zoom}
+}
+#mt-sketch-ui .mt-reviewer-sections{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+#mt-sketch-ui #mt-reviewer-form input{font-size:16px}
+
+#mt-sketch-ui .mt-report-header{padding:20px 24px;background:var(--mt-paper);border-bottom:1px solid var(--mt-line)}
+#mt-sketch-ui .mt-report-header h1{font-size:25px;line-height:1.25;letter-spacing:-.6px;margin:0;overflow-wrap:anywhere}
+@media(max-width:600px){#mt-sketch-ui .mt-report-header{padding:18px 16px}#mt-sketch-ui .mt-report-header h1{font-size:23px}#mt-sketch-ui .mt-page-head{margin-bottom:12px}}
+
+#mt-sketch-ui .mt-report-receipt{margin-top:16px;border-color:var(--mt-accent)}
+#mt-sketch-ui .mt-report-preview{display:block;width:100%;height:auto;background:#fff;border:1px solid var(--mt-line);border-radius:6px}
+#mt-sketch-ui .mt-image-dialog{width:min(680px,calc(100vw - 24px))}
+#mt-sketch-ui a.mt-btn{text-decoration:none;color:var(--mt-accent-ink)}
+</style>
+<script>
+(() => {
+  const root = document.getElementById('mt-sketch-ui');
+  const content = root.querySelector('#mt-content');
+  const ic = name => `<i data-lucide="${name}" aria-hidden="true"></i>`;
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const number = v => new Intl.NumberFormat('id-ID', {maximumFractionDigits:2}).format(v);
+  const plate = {x:55,y:50,w:565,h:310};
+  let state={view:'peserta',student:[],master:[],pairs:{},selected:'',submitted:false,published:false,noStudent:false,noMaster:false,compare:'side',opacity:65,note:'',result:'Perlu Perbaikan',feedback:false};
+  const photos={student:null,master:null};
+  const dimensions={student:{length:200,width:200,thickness:5},master:{length:200,width:200,thickness:5}};
+  const dimensionsApplied={student:false,master:false};
+  const dimensionsEditing={student:false,master:false};
+  const defaultDimensions=()=>({length:200,width:200,thickness:5});
+  const dimensionText=which=>{const d=dimensions[which];return [d.length,d.width,d.thickness].map(number).join(' × ')+' mm';};
+  function validateDimensions(d){
+    if(!d||['length','width','thickness'].some(k=>typeof d[k]!=='number'||!Number.isFinite(d[k])||d[k]<=0||d[k]>100000))throw Error('Isi panjang, lebar, dan tebal lebih dari 0 hingga 100.000 mm.');
+    return d;
+  }
+  let dimensionDialog=null;
+  function dimensionPanel(){const which=owner(),applied=dimensionsApplied[which]||isLocked();return `<div class="mt-dimension-summary" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;background:var(--mt-soft);border-bottom:1px solid var(--mt-line)"><span class="mt-caption">Dimensi test piece${applied?`: <strong class="mt-mono">${dimensionText(which)}</strong>`:''}</span>${isLocked()?'':button('edit-dimensions',applied?'Edit Dimension':'Add Dimension','','ruler')}</div>`;}
+  function openDimensionDialog(){
+    if(isLocked())return;captureForm();const d=dimensions[owner()];
+    if(!dimensionDialog){dimensionDialog=document.createElement('dialog');dimensionDialog.className='mt-detail-dialog';dimensionDialog.setAttribute('aria-labelledby','mt-dimension-title');root.append(dimensionDialog);}
+    dimensionDialog.innerHTML=`<div class="mt-dialog-head"><div><h2 id="mt-dimension-title">Dimensi test piece</h2><p>Masukkan panjang, lebar, dan tebal dalam mm.</p></div>${button('hide-dimensions','Tutup','mt-quiet','x')}</div><form id="mt-dimensions-form" class="mt-form" novalidate><div class="mt-fields">${[['length','Panjang · arah From Y'],['width','Lebar'],['thickness','Tebal']].map(([key,label])=>`<label class="mt-field">${label} (mm)<input name="${key}" inputmode="decimal" value="${esc(d[key])}" required></label>`).join('')}</div><p id="mt-dimension-error" class="mt-error" role="alert" hidden></p><p class="mt-caption" style="margin-top:10px">Template sketch bersifat skematis. Dimensi ditampilkan dalam mm.</p><div class="mt-tool-group" style="margin-top:16px;flex-wrap:wrap"><button type="submit" class="mt-btn mt-primary">Terapkan dimensi</button>${button('hide-dimensions','Batal','mt-quiet','x')}</div></form>`;
+    dimensionDialog.showModal();icons();dimensionDialog.querySelector('input').focus();
+  }
+  async function rotatePhoto(which,direction){
+    if(which!==owner()||isLocked()||!photos[which])return;
+    captureForm();const source=photos[which];busy=true;
+    try{
+      const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('Foto tidak dapat diputar. Pilih ulang foto.'));image.src=source;});
+      const canvas=document.createElement('canvas');canvas.width=image.height;canvas.height=image.width;
+      const ctx=canvas.getContext('2d');if(!ctx)throw Error('Browser tidak mendukung rotasi foto.');
+      ctx.translate(canvas.width/2,canvas.height/2);ctx.rotate(direction*Math.PI/2);ctx.drawImage(image,-image.width/2,-image.height/2);
+      const rotated=canvas.toDataURL('image/jpeg',.8);if(rotated.length>2796200)throw Error('Foto terlalu besar setelah diputar. Pilih foto yang lebih kecil.');
+      photos[which]=rotated;draftSaved=false;
+    }finally{busy=false;render();}
+    toast('Foto diputar 90°. Tekan Simpan draft atau Kirim untuk menyimpan perubahan.');
+  }
+  let active=null, drawing=false, currentStroke=null, undoStack=[], fileTarget='student', draftSaved=false, photoExpanded={};
+  const design={viewport:'Adaptif',grid:true,compact:false};
+  let mobileTab='identity';
+  let reviewerPaneDrafts={batches:{batchId:'',label:''}};
+  state.student=[];state.master=[];state.pairs={};state.selected='';state.note='';
+  let user={role:'Peserta',guest:true,userId:'',nama:''}, participantName='', token='', busy=false, records=[], currentPiece='', currentMethod='';
+  const METHODS=['Magnetic Particle Testing','Penetrant Testing'];
+  let testPieces=[],piecesError='';
+  let batches=[],batchesError='',currentBatch='',reviewBatch='';
+  let keyMethod='',keyPiece='',keyStatus='';
+  let pieceQuery='',pieceKeyMethod='',pieceKeyStatus='';
+  let adminData={pieces:[],batches:[],reports:[],keys:[]},showTrash={pieces:false,batches:false,reports:false,keys:false},adminDialog=null,adminEdit=null;
+  const batchLabel=id=>{const b=batches.find(b=>b.id===id);return b?b.id+(b.label?' · '+b.label:''):(id||'Tanpa batch (laporan lama)');};
+  function filteredReviewRecords(){
+    const hasMethod = typeof currentMethod !== 'undefined' && currentMethod;
+    const hasPiece = typeof currentPiece !== 'undefined' && currentPiece && (typeof state !== 'undefined' && state.view === 'penguji');
+    return records.filter(r=>r.kind==='student'&&r.status!=='Draft'&&(!reviewBatch||(reviewBatch==='__UNASSIGNED__'?!r.batch:r.batch===reviewBatch))&&(!hasMethod||r.method===currentMethod)&&(!hasPiece||r.piece===currentPiece));
+  }
+  function batchFilter(){const ids=[...new Set([...batches.map(b=>b.id),...records.filter(r=>r.kind==='student'&&r.batch).map(r=>r.batch)])].sort();return `<label class="mt-field full">Filter batch pemeriksaan<select id="mt-batch-filter"><option value="">Semua batch</option>${ids.map(id=>`<option value="${esc(id)}" ${reviewBatch===id?'selected':''}>${esc(batchLabel(id))}</option>`).join('')}<option value="__UNASSIGNED__" ${reviewBatch==='__UNASSIGNED__'?'selected':''}>Tanpa batch (laporan lama)</option></select><span>${filteredReviewRecords().length} laporan terkirim dalam filter ini</span></label>`;}
+  const loaded={student:null,master:null};let pending=null, reviseSource={student:null,master:null};
+  function api(action,payload={}) {
+    if(!globalThis.google?.script?.run)return Promise.reject(Error('Buka aplikasi melalui URL deployment Google Apps Script.'));
+    return new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>reject(Error('Server belum merespons dalam 45 detik. Jangan tutup halaman. Periksa koneksi lalu coba simpan/kirim lagi.')),45000);
+      const fail=e=>{clearTimeout(timer);reject(Error(e.message||String(e)));};
+      google.script.run.withSuccessHandler(r=>{clearTimeout(timer);if(r?.success)resolve(r.data);else reject(Error(r?.message||'Server tidak mengembalikan hasil.'));}).withFailureHandler(fail).mtApi(action,{...payload,token});
+    });
+  }
+  function resumeKey(create=false){try{let key=localStorage.getItem('mt-resume-key');if(!key&&create){key=crypto.randomUUID()+crypto.randomUUID();localStorage.setItem('mt-resume-key',key);}return key||'';}catch(error){return '';}}
+  function rememberGuest(){try{if(user?.guest&&token)sessionStorage.setItem('mt-guest-session',JSON.stringify({user,token}));}catch(error){}}
+  async function resumeGuest(create=false){
+    if(!user?.guest)return;
+    const key=resumeKey(create||!!token);if(!key&&!token){if(!create)return;}
+    const r=await api('participant',{nama:participantName||user.nama,resumeKey:key});
+    user=r.user;token=r.token;if(!participantName)participantName=user.nama;rememberGuest();
+  }
+  async function refreshBatches(){try{batches=await api('batches');batchesError='';}catch(error){batchesError=error.message;throw error;}}
+  async function refreshPieces(){try{testPieces=await api('testPieces');piecesError='';}catch(error){piecesError=error.message;throw error;}}
+  async function refreshRecords(){if(user?.role==='Peserta'){records=[];return;}records=token?await api('list'):[];if(token&&user?.role==='Penguji')adminData=await api('adminList');}
+
+  async function ensureParticipant(){
+    if(user?.role!=='Peserta'||!user.guest)return;
+    const name=participantName.trim();if(name.length<2||name.length>120)throw Error('Isi Nama peserta terlebih dahulu (2–120 karakter).');
+    await resumeGuest(true);
+    if(user.nama!==name)user=await api('rename',{nama:name});
+    rememberGuest();
+  }
+
+  function connectionPanel(){
+    if(!user)return '';
+    const options=state.view==='penguji'?filteredReviewRecords():records.filter(r=>state.view==='kunci'?r.kind==='master':r.kind==='student');
+    return `<section data-mobile-pane="identity" class="mt-box" style="padding:14px;margin-bottom:20px"><div class="mt-fields">${user.guest?`<label class="mt-field full">Nama peserta<input id="mt-participant-name" autocomplete="name" maxlength="120" value="${esc(participantName)}" placeholder="Masukkan nama lengkap" ${isLocked()?'disabled':''}></label>`:''}${state.view!=='kunci'&&user.role==='Peserta'?`<label class="mt-field full">Batch<select id="mt-batch" ${isLocked()?'disabled':''}><option value="">${batchesError?'Daftar gagal dimuat — tekan Perbarui':batches.length?'Pilih batch training':'Belum ada batch — hubungi penguji'}</option>${batches.map(b=>`<option value="${esc(b.id)}" ${currentBatch===b.id?'selected':''}>${esc(batchLabel(b.id))}</option>`).join('')}${currentBatch&&!batches.some(b=>b.id===currentBatch)?`<option selected value="${esc(currentBatch)}">${esc(currentBatch)}</option>`:''}</select></label>`:''}${state.view==='penguji'?batchFilter():''}<label class="mt-field full">Metode ${state.view==='penguji'?'<span>Filter metode</span>':''}<select id="mt-method" ${isLocked()||(user.guest&&participantName.trim().length<2)?'disabled':''}><option value="">${state.view==='penguji'?'Semua metode':'Pilih metode pengujian'}</option>${METHODS.map(method=>`<option value="${method}" ${currentMethod===method?'selected':''}>${method}</option>`).join('')}</select></label><label class="mt-field">Test Piece ID<select id="mt-piece" ${(state.view!=='penguji'&&(isLocked()||!currentMethod))?'disabled':''}><option value="">${state.view==='penguji'?'Semua Test Piece (opsional)':(piecesError?'Daftar gagal dimuat — tekan Muat ulang':'Pilih Test Piece')}</option>${testPieces.map(piece=>`<option value="${esc(piece.id)}" ${piece.id===currentPiece?'selected':''}>${esc(piece.id)}${piece.label?' · '+esc(piece.label):''}</option>`).join('')}${currentPiece&&!testPieces.some(p=>p.id===currentPiece)?`<option value="${esc(currentPiece)}" selected disabled>${esc(currentPiece)} · belum dimuat/terdaftar</option>`:''}</select></label>${user.role==='Penguji'?`<label class="mt-field">Buka laporan tersimpan<select id="mt-record"><option value="">Pilih laporan…</option>${options.map(r=>`<option value="${esc(r.id)}" ${loaded[state.view==='kunci'?'master':'student']?.id===r.id?'selected':''}>${esc(r.piece)} · ${r.method==='Penetrant Testing'?'PT':'MT'} · ${esc(r.nama||r.userId)} · ${esc(r.status)}${r.kind==='student'?' · '+esc(batchLabel(r.batch)):''}</option>`).join('')}</select></label>`:''}</div><div class="mt-tool-group" style="margin-top:10px">${state.view!=='penguji'?button('new-report','Laporan baru','','plus'):''}${button('refresh-records',user.role==='Peserta'?'Perbarui daftar':'Muat ulang','','refresh-cw')}${user.role==='Penguji'?button('open-report','Buka laporan','','folder-open'):''}<span class="mt-caption" role="status">${busy?'Menyimpan / memuat…':esc(user.nama)+' · '+esc(user.role)}</span></div></section>`;
+  }
+  function applyDocument(result){
+    const r=result.record,d=result.document,which=r.kind;
+    loaded[which]=r;reviseSource[which]=d.revises||null;state[which]=d.indications;photos[which]=d.photo;dimensions[which]=d.dimensions||defaultDimensions();dimensionsApplied[which]=true;dimensionsEditing[which]=false;currentPiece=d.piece;if(which==='student')currentBatch=d.batch||r.batch||'';currentMethod=d.method||r.method||'Magnetic Particle Testing';
+    state[which==='master'?'published':'submitted']=r.status!=='Draft';state[which==='master'?'noMaster':'noStudent']=d.noIndications;
+    if(which==='student'){
+      state.master=result.master?.document.indications||[];photos.master=result.master?.document.photo||null;dimensions.master=result.master?.document.dimensions||defaultDimensions();dimensionsApplied.master=true;dimensionsEditing.master=false;
+      loaded.master=result.master?.record||null;state.pairs=r.evaluation?.pairs||{};
+      state.note=r.evaluation?.note||'';state.result=r.evaluation?.result||'Perlu Perbaikan';state.feedback=!!r.evaluation?.published;
+    }
+    active=null;drawing=false;
+  }
+  async function openSavedReport(id){
+    if(user?.role!=='Penguji')throw Error('Menu laporan tersimpan hanya tersedia untuk penguji.');
+    if(!id)throw Error('Pilih laporan tersimpan terlebih dahulu.');
+    busy=true;toast('Membuka laporan tersimpan…');
+    try{
+      if(user?.guest)await resumeGuest(false);
+      const result=await api('load',{id});applyDocument(result);
+      if(user?.guest){participantName=result.document.author?.nama||result.record.nama||participantName;mobileTab='sketch';}
+    }finally{busy=false;render();}
+    toast('Laporan berhasil dibuka. Gunakan tab Sketch, Indikasi, dan Foto untuk melihat isinya.');
+  }
+  async function saveRemote(final){
+    if(!METHODS.includes(currentMethod)){mobileTab='identity';render();throw Error('Pilih metode pengujian pada tab Data terlebih dahulu.');}
+    if(!currentPiece){mobileTab='identity';render();throw Error('Pilih Test Piece setelah memilih metode.');}
+    if(owner()==='student'&&!currentBatch){mobileTab='identity';render();throw Error('Pilih batch training pada tab Data terlebih dahulu.');}
+    validateDimensions(dimensions[owner()]);
+    busy=true;try{await ensureParticipant();}catch(error){busy=false;throw error;}const which=owner(),old=loaded[which];
+    const body={kind:which,id:old?.id||null,revision:old?.revision||0,final,document:{batch:which==='student'?currentBatch:'',dimensions:dimensions[which],method:currentMethod,piece:currentPiece,revises:reviseSource[which],indications:state[which],noIndications:state[which==='master'?'noMaster':'noStudent'],photo:photos[which]}};
+    const signature=JSON.stringify(body);if(!pending||pending.signature!==signature)pending={signature,requestId:crypto.randomUUID()};persist();
+    busy=true;render();toast(final?(which==='student'?'Mengirim laporan… Mohon tunggu.':'Menerbitkan kunci… Mohon tunggu.'):'Menyimpan draft… Mohon tunggu.');try{const r=await api('save',{...body,requestId:pending.requestId});loaded[which]=r;state[which==='master'?'published':'submitted']=r.status!=='Draft';pending=null;draftSaved=true;if(final&&which==='student')mobileTab='send';try{await refreshRecords();}catch(error){console.warn('Data tersimpan; daftar belum dimuat ulang:',error.message);}}finally{busy=false;render();}
+  }
+  function showLogin(){content.innerHTML=`<section class="mt-box" style="max-width:400px;margin:35px auto;padding:26px"><div class="mt-eyebrow">MT SKETCH REVIEW</div><h1>Masuk penguji</h1><p class="mt-subtitle">Gunakan akun yang disiapkan instruktur.</p><form id="mt-login-form" style="margin-top:22px"><div class="mt-fields"><label class="mt-field full">ID pengguna<input name="userId" autocomplete="username" required></label><label class="mt-field full">Kode akses<input name="pin" type="password" autocomplete="current-password" minlength="6" required></label></div><button class="mt-btn mt-primary mt-wide" style="margin-top:18px" type="submit">Masuk</button><p id="mt-login-error" class="mt-error" role="alert"></p></form></section>`;}
+
+  const reviewerStorageKey='ndt-reviewer-session-v1';
+  function clearReviewerSession(){try{sessionStorage.removeItem(reviewerStorageKey);}catch(error){}}
+  function readReviewerSession(){try{const saved=JSON.parse(sessionStorage.getItem(reviewerStorageKey)||'null');if(!saved)return null;if(saved.schema!==1||typeof saved.token!=='string'||saved.token.length<20||saved.token.length>100){clearReviewerSession();return null;}return saved;}catch(error){clearReviewerSession();return null;}}
+  function rememberReviewerSession(){
+    if(user?.role!=='Penguji'||!token)return;
+    try{sessionStorage.setItem(reviewerStorageKey,JSON.stringify({schema:1,token,view:state.view,paneDrafts:typeof reviewerPaneDrafts==='undefined'?{}:reviewerPaneDrafts,reportId:state.view==='kunci'?loaded.master?.id:state.view==='penguji'?loaded.student?.id:null,reviewBatch,keyMethod,keyPiece,keyStatus,pieceQuery,pieceKeyMethod,pieceKeyStatus}));}catch(error){}
+  }
+  async function restoreReviewerSession(saved){
+    const previousToken=token;token=saved.token;
+    try{const verified=await api('me');if(verified?.role!=='Penguji'){clearReviewerSession();token=previousToken;return false;}
+      resetWorking();user=verified;token=saved.token;state.view=['penguji','pieces','batches','keys','kunci'].includes(saved.view)?saved.view:'penguji';
+      if(typeof reviewerPaneDrafts!=='undefined'){const d=saved.paneDrafts?.batches;reviewerPaneDrafts={batches:{batchId:typeof d?.batchId==='string'?d.batchId.slice(0,80):'',label:typeof d?.label==='string'?d.label.slice(0,200):''}};}
+      reviewBatch=typeof saved.reviewBatch==='string'?saved.reviewBatch:'';keyMethod=METHODS.includes(saved.keyMethod)?saved.keyMethod:'';keyPiece=saved.keyPiece||'';keyStatus=['Draft','Published'].includes(saved.keyStatus)?saved.keyStatus:'';pieceQuery=saved.pieceQuery||'';pieceKeyMethod=METHODS.includes(saved.pieceKeyMethod)?saved.pieceKeyMethod:'';pieceKeyStatus=['published','draft','missing'].includes(saved.pieceKeyStatus)?saved.pieceKeyStatus:'';return true;
+    }catch(error){token=previousToken;if(/Sesi berakhir|Silakan masuk|Tidak diizinkan/.test(error.message)){clearReviewerSession();return false;}throw error;}
+  }
+  const draftStorageKey='mt-participant-draft-v1';
+  let recoveryWarningShown=false;
+  let reviewerDialog=null;
+  function openReviewerLogin(){
+    captureForm();persist();
+    if(!reviewerDialog){
+      reviewerDialog=document.createElement('dialog');reviewerDialog.className='mt-detail-dialog';reviewerDialog.setAttribute('aria-labelledby','mt-reviewer-title');
+      reviewerDialog.innerHTML=`<div class="mt-dialog-head"><div><h2 id="mt-reviewer-title">Masuk penguji</h2><p>Masukkan password untuk membuka pemeriksaan.</p></div>${button('close-reviewer','Batal','mt-quiet','x')}</div><form id="mt-reviewer-form" class="mt-form"><label class="mt-field">Password penguji<input name="password" type="password" inputmode="numeric" autocomplete="current-password" required></label><p id="mt-reviewer-error" class="mt-error" role="alert" hidden></p><button type="submit" class="mt-btn mt-primary mt-wide" style="margin-top:16px">Masuk</button></form>`;
+      reviewerDialog.addEventListener('cancel',e=>{if(busy){e.preventDefault();return;}reviewerDialog.querySelector('form').reset();});root.append(reviewerDialog);
+    }
+    reviewerDialog.querySelector('form').reset();reviewerDialog.querySelector('#mt-reviewer-error').hidden=true;
+    reviewerDialog.showModal();icons();reviewerDialog.querySelector('input').focus();
+  }
+  function resetWorking(){reviewerPaneDrafts={batches:{batchId:'',label:''}};currentBatch='';reviewBatch='';dimensions.student=defaultDimensions();dimensions.master=defaultDimensions();dimensionsApplied.student=false;dimensionsApplied.master=false;dimensionsEditing.student=false;dimensionsEditing.master=false;state.student=[];state.master=[];state.pairs={};state.note='';state.feedback=false;state.submitted=false;state.published=false;state.noStudent=false;state.noMaster=false;photos.student=null;photos.master=null;loaded.student=null;loaded.master=null;reviseSource.student=null;reviseSource.master=null;records=[];active=null;drawing=false;pending=null;draftSaved=false;}
+  async function returnParticipant(){
+    clearReviewerSession();
+    if(user?.role==='Penguji'&&token){try{await api('logout');}catch(error){}}
+    resetWorking();user={role:'Peserta',guest:true,userId:'',nama:''};token='';participantName='';currentPiece='';currentMethod='';mobileTab='identity';state.view='peserta';
+    try{const saved=JSON.parse(sessionStorage.getItem('mt-guest-session')||'null');if(saved?.user?.guest&&saved.user.role==='Peserta'){user=saved.user;token=saved.token;participantName=user.nama;}}catch(error){}
+    restoreDraft();render();if(token)refreshRecords().then(render).catch(error=>toast(error.message));
+  }
+  function persist(){
+    if(user?.role==='Penguji'){rememberReviewerSession();return;}
+    if(!user?.guest||state.view!=='peserta')return;
+    try{
+      let savedPending=null;
+      if(pending){const body=JSON.parse(pending.signature);savedPending={requestId:pending.requestId,final:body.final};}
+      sessionStorage.setItem(draftStorageKey,JSON.stringify({schema:1,mobileTab,userId:user.userId,name:participantName,batch:currentBatch,method:currentMethod,piece:currentPiece,
+        dimensions:dimensions.student,dimensionsApplied:typeof dimensionsApplied!=='undefined'?dimensionsApplied.student:false,indications:state.student,photo:photos.student,submitted:state.submitted,noIndications:state.noStudent,
+        record:loaded.student,revisionSource:reviseSource.student,active,drawing,dialogOpen:!!detailDialog?.open,
+        pending:savedPending,updated:new Date().toISOString()}));
+    }catch(error){
+      if(!recoveryWarningShown){recoveryWarningShown=true;toast('Browser tidak dapat menyimpan pemulihan draft. Tekan Simpan draft sebelum refresh.');}
+    }
+  }
+  function restoreDraft(){
+    if(!user?.guest)return false;
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(draftStorageKey)||'null');
+      if(!saved||saved.schema!==1||!Array.isArray(saved.indications))return false;
+      if(saved.userId&&saved.userId!==user.userId)return false;
+      mobileTab=['identity','sketch','indications','photo','send'].includes(saved.mobileTab)?saved.mobileTab:'identity';participantName=saved.name||'';currentBatch=saved.batch||'';currentPiece=saved.piece||'';currentMethod=saved.method||(saved.piece?'Magnetic Particle Testing':'');state.student=saved.indications;
+      dimensions.student=saved.dimensions||defaultDimensions();if(typeof dimensionsApplied!=='undefined'){dimensionsApplied.student=saved.dimensionsApplied!=null?!!saved.dimensionsApplied:(saved.indications?.length>0||!!saved.record);dimensionsEditing.student=false;}photos.student=saved.photo||null;state.submitted=!!saved.submitted;state.noStudent=!!saved.noIndications;
+      loaded.student=saved.record||null;reviseSource.student=saved.revisionSource||null;
+      active=saved.active||null;drawing=!!saved.drawing;state.selected=active?.id||'';
+      if(saved.pending){const body={kind:'student',id:loaded.student?.id||null,revision:loaded.student?.revision||0,final:saved.pending.final,
+        document:{batch:currentBatch,dimensions:dimensions.student,method:currentMethod,piece:currentPiece,revises:reviseSource.student,indications:state.student,noIndications:state.noStudent,photo:photos.student}};
+        pending={signature:JSON.stringify(body),requestId:saved.pending.requestId};}
+      return {dialogOpen:saved.dialogOpen};
+    }catch(error){return false;}
+  }
+
+  function icons(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:16,height:16}});}
+  const owner=()=>state.view==='kunci'?'master':'student';
+  const list=()=>state[owner()];
+  const sorted=arr=>[...arr].sort((a,b)=>a.fromY-b.fromY||a.order-b.order);
+  const isLocked=()=>owner()==='student'?state.submitted:state.published;
+  function toast(message){const el=root.querySelector('#mt-announcement');el.textContent=message;el.hidden=false;el.scrollIntoView?.({block:'nearest',behavior:'smooth'});}
+  function button(action,label,style='',icon='',attrs=''){return `<button type="button" data-action="${action}" class="mt-btn cursor-interaction ${style}" ${attrs}>${icon?ic(icon):''}${label}</button>`;}
+  function choose(id){const found=list().find(v=>v.id===id);active=found?clone(found):null;state.selected=id;drawing=false;undoStack=[];}
+  function pathFor(points){return points.map((p,i)=>`${i?'L':'M'}${(plate.x+p[0]*plate.w).toFixed(1)},${(plate.y+p[1]*plate.h).toFixed(1)}`).join(' ');}
+  function mark(ind,n,color,dashed=false,selected=false,temporary=false){
+    const points=ind.strokes.flat();if(!points.length)return '';
+    const last=points[Math.floor(points.length/2)];const x=Math.min(plate.x+last[0]*plate.w+24,plate.x+plate.w-20),y=Math.max(plate.y+last[1]*plate.h-20,plate.y+20);
+    return `<g ${temporary?'':`data-select="${esc(ind.id)}"`} class="mt-mark ${temporary?'':'cursor-interaction'}" style="color:${color}">${selected?`<circle cx="${x}" cy="${y}" r="22" fill="currentColor" opacity=".13"/>`:''}${ind.strokes.map(p=>`<path class="mt-ind-stroke" d="${pathFor(p)}" stroke="currentColor" ${dashed?'stroke-dasharray="5 3"':''}/>`).join('')}${temporary?'':`<circle cx="${x}" cy="${y}" r="14" fill="currentColor"/><text class="mt-ind-label" x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="17">${n}</text>`}</g>`;
+  }
+  function sketch(id,sets,editable=false){
+    const dim=dimensions[sets[0]?.owner||owner()];
+    return `<svg class="mt-sketch" id="${id}" viewBox="0 0 760 440" role="img" aria-label="Sketch pelat las dengan datum kiri Y dan indikasi bernomor" ${editable?'data-editor="true"':''} data-drawing="${editable&&drawing}"><defs><pattern id="${id}-grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" class="mt-grid-dot"/></pattern></defs><rect x="0" y="0" width="760" height="440" fill="url(#${id}-grid)" opacity="${design.grid?.65:0}"/><rect class="mt-plate" x="55" y="50" width="565" height="310"/><rect class="mt-weld" x="55" y="189" width="565" height="62"/><rect class="mt-plate" x="78" y="72" width="35" height="35"/><rect class="mt-plate" x="562" y="72" width="35" height="35"/>${currentPiece?`<text class="mt-piece-label" data-piece-label="true" x="337.5" y="102" text-anchor="middle" font-size="28" ${String(currentPiece).length>23?'textLength="420" lengthAdjust="spacingAndGlyphs"':''}>${esc(currentPiece)}</text>`:''}<path class="mt-plate" d="M660 50H712V189L686 220L660 189ZM660 251L686 220L712 251V360H660Z"/><line class="mt-centerline" x1="35" x2="737" y1="220" y2="220"/><text class="mt-diagram-text" x="60" y="178" font-size="19" font-weight="600">Y</text><line class="mt-guide" x1="55" x2="620" y1="390" y2="390"/><line class="mt-guide" x1="55" x2="55" y1="383" y2="397"/><line class="mt-guide" x1="620" x2="620" y1="383" y2="397"/><text class="mt-diagram-text" x="337" y="419" font-size="16" text-anchor="middle">${number(dim.length)} mm</text><text class="mt-diagram-text" x="25" y="205" font-size="16" text-anchor="middle" transform="rotate(-90 25 205)">${number(dim.width)} mm</text><text class="mt-diagram-text" x="686" y="419" font-size="16" text-anchor="middle">${number(dim.thickness)} mm</text>${sets.map((set,j)=>`<g data-layer="${set.owner}" opacity="${set.opacity??1}">${sorted(set.data).map((ind,i)=>mark(ind,i+1,set.color,set.dash,editable&&active?.id===ind.id)).join('')}</g>`).join('')}<g class="mt-draft-strokes">${editable&&active&&!list().some(v=>v.id===active.id)?mark(active,'', 'var(--mt-accent)',false,false,true):''}</g></svg>`;
+  }
+  function photoPanel(which,review=false){
+    const src=photos[which];const label=review?(which==='master'?'Foto kunci':'Foto peserta'):'Foto test piece';
+    return `<section class="mt-box mt-photo-box ${photoExpanded[which]?'mt-full-photo':''}"><div class="mt-photo-title"><h3>${label}</h3>${review?'':`<span class="mt-caption">Opsional</span>`}</div>${src?`<img class="mt-photo-image" src="${src}" alt="Foto test piece ${which==='master'?'kunci':'peserta'} yang dipilih"><div class="mt-photo-actions">${button('zoom-photo',photoExpanded[which]?'Perkecil':'Perbesar','','maximize-2',`data-owner="${which}"`)}${!review&&!isLocked()?button('rotate-photo','↶ 90°','','rotate-ccw',`data-owner="${which}" data-direction="-1"`)+button('rotate-photo','↷ 90°','','rotate-cw',`data-owner="${which}" data-direction="1"`):''}${!review&&!isLocked()?button('remove-photo','Hapus','mt-quiet','trash-2',`data-owner="${which}"`):''}</div>`:`<div class="mt-photo-placeholder">${ic('image-plus')}<p>${review?'Foto tidak dilampirkan':'Foto keseluruhan benda uji'}</p>${review?'':'<small>JPG / PNG · Maks. 10 MB</small>'}</div>`}${!review&&!isLocked()?`<div class="mt-photo-actions">${button('upload',src?'Ganti foto':'Upload foto','','upload',`data-owner="${which}"`)}${button('camera','Kamera','','camera',`data-owner="${which}"`)}</div>`:''}</section>`;
+  }
+  function formPanel(){
+    if(!active)return `<section class="mt-box"><div class="mt-form"><h3>Detail indikasi</h3><div class="mt-empty">Pilih indikasi pada tabel atau tambahkan indikasi baru.</div>${button('add','Add Indication','mt-primary mt-wide','plus',isLocked()?'disabled':'')}</div></section>`;
+    const n=sorted(list()).findIndex(v=>v.id===active.id)+1;
+    const numeric=(name,label,value)=>`<label class="mt-field ${name==='fromY'?'full':''}">${label}<span class="mt-input-unit"><input name="${name}" inputmode="decimal" type="text" value="${esc(value)}" autocomplete="off" ${isLocked()?'disabled':''}><span>mm</span></span></label>`;
+    const choices=(name,values)=>`<div class="mt-choices">${values.map(v=>`<label class="mt-choice cursor-interaction ${v==='Reject'?'reject':''}"><input type="radio" name="${name}" value="${v}" ${active[name]===v?'checked':''} ${isLocked()?'disabled':''}>${v}</label>`).join('')}</div>`;
+    return `<section class="mt-box"><form id="mt-indication-form" class="mt-form" novalidate><div class="mt-form-heading"><h3>${n?'Indikasi '+String(n).padStart(2,'0'):'Indikasi baru'}</h3><span class="mt-badge ${n?'':'good'}">${n?'Detail':'Menggambar'}</span></div><div class="mt-fields">${numeric('length','Length',active.length)}${numeric('width','Width',active.width)}${numeric('fromY','From Y · jarak dari kiri',active.fromY)}<div class="mt-field full">Tipe indikasi${choices('type',['Round','Linear'])}</div><div class="mt-field full">Keputusan${choices('decision',['Accept','Reject'])}</div><label class="mt-field full">Catatan <span class="mt-caption">Opsional</span><textarea name="remark" placeholder="Keterangan indikasi…" ${isLocked()?'disabled':''}>${esc(active.remark)}</textarea></label></div><p id="mt-field-error" class="mt-error" role="alert" hidden></p>${isLocked()?'':`<div class="mt-form-actions">${button('save-indication',n?'Simpan perubahan':'Simpan indikasi','mt-primary','check')}${button(n?'delete-indication':'cancel',n?'Hapus':'Batal',n?'mt-danger':'mt-quiet',n?'trash-2':'x')}${n?button('cancel-edit','Batal edit','mt-quiet','x'):''}</div>`}</form></section>`;
+  }
+  function pieceKeyState(id,method){const keys=records.filter(r=>r.kind==='master'&&r.piece===id&&r.method===method);return {published:keys.find(r=>r.status==='Published')||null,draft:keys.find(r=>r.status==='Draft')||null};}
+  function pieceKeyMatches(piece){
+    if(pieceQuery&&!(piece.id+' '+piece.label).toLowerCase().includes(pieceQuery.toLowerCase()))return false;
+    const methods=pieceKeyMethod?[pieceKeyMethod]:METHODS;
+    return !pieceKeyStatus||methods.some(method=>{const k=pieceKeyState(piece.id,method);return pieceKeyStatus==='published'?!!k.published:pieceKeyStatus==='draft'?!k.published&&!!k.draft:!k.published&&!k.draft;});
+  }
+  function pieceKeyPanel(piece,method,manage=false){const k=pieceKeyState(piece.id,method),short=method==='Penetrant Testing'?'PT':'MT';return `<section class="mt-box" style="padding:12px;min-width:0"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px"><strong>${short}</strong><span class="mt-badge ${k.published?'good':'warm'}">${k.published?'Sudah submit key':k.draft?'Draft · belum submit':'Belum ada key'}</span></div>${k.published&&k.draft?'<p class="mt-caption" style="margin-top:8px">Ada draft revisi yang belum diterbitkan.</p>':''}${manage?`<div class="mt-tool-group" style="margin-top:10px;flex-wrap:wrap">${k.published?button('open-key','Lihat key','','eye',`data-id="${esc(k.published.id)}"`):''}${k.draft?button('admin-edit','Lanjut draft','','pencil',`data-kind="keys" data-id="${esc(k.draft.id)}"`):k.published?button('admin-edit','Edit / Revisi','','pencil',`data-kind="keys" data-id="${esc(k.published.id)}"`):button('create-key','Buat master key','mt-primary','plus',`data-piece="${esc(piece.id)}" data-method="${method}"`)}${k.published||k.draft?button('piece-key-history','Detail / Riwayat','mt-quiet','list',`data-piece="${esc(piece.id)}" data-method="${method}"`):''}</div>`:''}</section>`;}
+  let testPieceDialog=null;
+  function openTestPieceDialog(){
+    if(user?.role!=='Penguji')return;
+    if(!testPieceDialog){testPieceDialog=document.createElement('dialog');testPieceDialog.className='mt-detail-dialog';testPieceDialog.setAttribute('aria-labelledby','mt-add-piece-title');root.append(testPieceDialog);testPieceDialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});}
+    testPieceDialog.innerHTML=`<div class="mt-dialog-head"><div><h2 id="mt-add-piece-title">Add Test piece</h2><p>Tambahkan nomor Test Piece baru.</p></div>${button('close-add-piece','Tutup','mt-quiet','x')}</div><form id="mt-piece-form" class="mt-form"><div class="mt-fields"><label class="mt-field full">Test Piece ID<input name="pieceId" maxlength="80" placeholder="Contoh: MT PT 113 A" required></label><label class="mt-field full">Keterangan (opsional)<input name="label" maxlength="200" placeholder="Keterangan benda uji"></label></div><p class="mt-error" id="mt-piece-error" role="alert" hidden></p><div class="mt-tool-group" style="margin-top:16px;flex-wrap:wrap"><button type="submit" class="mt-btn mt-primary">Add Test piece</button>${button('close-add-piece','Batal','mt-quiet','x')}</div></form>`;
+    testPieceDialog.showModal();icons();testPieceDialog.querySelector('input').focus();
+  }
+  function groupedTestPieces(){const groups=new Map();for(const piece of testPieces){const match=piece.id.match(/^(.*?)\s+([AB])$/i)||piece.id.match(/^(.*\d)[ _./-]*([AB])$/i);const base=match?match[1].trim():piece.id;if(!groups.has(base))groups.set(base,{base,sides:{},single:null});if(match)groups.get(base).sides[match[2].toUpperCase()]=piece;else groups.get(base).single=piece;}return [...groups.values()].sort((a,b)=>a.base.localeCompare(b.base,undefined,{numeric:true}));}
+  let pieceGroupDialog=null;
+  function closePieceGroup(){pieceGroupDialog?.close();}
+  function groupedKeySlot(piece,method){if(!piece)return '<div class="mt-piece-key-slot"><span class="mt-caption">Side belum terdaftar</span></div>';const key=pieceKeyState(piece.id,method),primary=key.draft||key.published;return `<section class="mt-piece-key-slot"><span class="mt-badge ${key.published?'good':'warm'}">${key.published?'Terbit':key.draft?'Draft':'Belum ada key'}</span>${key.published&&key.draft?'<p class="mt-caption" style="margin-top:5px">Ada draft revisi</p>':''}<div class="mt-tool-group">${primary?button('admin-edit',key.draft?'Lanjut draft':'Edit / Revisi','','pencil',`data-kind="keys" data-id="${esc(primary.id)}"`):button('create-key','Buat key','mt-primary','plus',`data-piece="${esc(piece.id)}" data-method="${method}"`)}${key.published?button('open-key','Lihat','','eye',`data-id="${esc(key.published.id)}"`):''}${primary?button('piece-key-history','Riwayat','mt-quiet','list',`data-piece="${esc(piece.id)}" data-method="${method}"`):''}</div></section>`;}
+  function openPieceGroup(base){
+    if(user?.role!=='Penguji')return;const group=groupedTestPieces().find(g=>g.base===base);if(!group)throw Error('Test Piece tidak ditemukan. Muat ulang daftar.');
+    if(!pieceGroupDialog){pieceGroupDialog=document.createElement('dialog');pieceGroupDialog.className='mt-detail-dialog';pieceGroupDialog.style.width='min(640px,calc(100vw - 24px))';pieceGroupDialog.setAttribute('aria-labelledby','mt-piece-group-title');root.append(pieceGroupDialog);}
+    const rows=group.single&&!Object.keys(group.sides).length?[['—',group.single]]:[['A',group.sides.A],['B',group.sides.B],...(group.single?[['—',group.single]]:[])];
+    pieceGroupDialog.innerHTML=`<div class="mt-dialog-head"><div><h2 id="mt-piece-group-title">${esc(group.base)}</h2><p>Master key per side dan metode</p></div>${button('close-piece-group','Tutup','mt-quiet','x')}</div><div class="mt-form"><div class="mt-piece-key-grid"><span class="mt-caption">Side</span><strong>MT</strong><strong>PT</strong>${rows.map(([side,piece])=>`<strong style="align-self:center">${side}</strong>${METHODS.map(method=>groupedKeySlot(piece,method)).join('')}`).join('')}</div><details style="margin-top:14px"><summary style="cursor:pointer">Edit data Test Piece</summary><div class="mt-tool-group" style="margin-top:10px;flex-wrap:wrap">${rows.map(([side,piece])=>piece?button('admin-edit',side==='—'?'Edit Test Piece':'Edit Side '+side,'','pencil',`data-kind="pieces" data-id="${esc(piece.id)}"`):'<span class="mt-caption">Side '+side+' belum terdaftar.</span>').join('')}</div></details></div>`;
+    pieceGroupDialog.showModal();icons();
+  }
+  function pieceManager(){const groups=groupedTestPieces();return `<section class="mt-box mt-form"><h1>Master Key</h1><div class="mt-tool-group" style="margin:12px 0;flex-wrap:wrap">${button('add-test-piece','Add Test piece','mt-primary','plus')}${button('refresh-records','Muat ulang','','refresh-cw')}</div><p class="mt-caption">${groups.length} nomor Test Piece · ${testPieces.length} side/entri</p><div class="mt-piece-rows">${groups.map(group=>`<div class="mt-piece-row"><strong>${esc(group.base)}</strong>${button('edit-piece-group','Edit','','pencil',`data-base="${esc(group.base)}"`)}</div>`).join('')||'<div class="mt-empty">Belum ada Test Piece.</div>'}</div></section>`;}
+  function batchManager(){return `<section class="mt-box mt-form"><h1>Database Batch</h1><p class="mt-subtitle">Peserta memilih batch ini saat mengisi laporan. Penguji memfilter pemeriksaan berdasarkan batch.</p><form id="mt-batch-form" style="margin-top:18px"><div class="mt-fields"><label class="mt-field">Kode batch<input name="batchId" value="${esc(reviewerPaneDrafts.batches.batchId)}" maxlength="80" placeholder="Contoh: MT-2026-11" required></label><label class="mt-field">Nama batch (opsional)<input name="label" value="${esc(reviewerPaneDrafts.batches.label)}" maxlength="200" placeholder="Contoh: Magnetic Testing Level II November 2026"></label></div><p class="mt-error" id="mt-batch-error" role="alert" hidden></p><button type="submit" class="mt-btn mt-primary" style="margin-top:12px">Tambah batch</button></form><h2 style="margin-top:22px">Batch terdaftar (${batches.length})</h2><div class="mt-indication-cards" style="margin-top:12px">${batches.map(piece=>`<article class="mt-indication-card"><div class="mt-indication-card-head"><strong style="overflow-wrap:anywhere">${esc(piece.id)}</strong>${button('admin-edit','Edit','','pencil',`data-kind="batches" data-id="${esc(piece.id)}"`)}</div><p style="overflow-wrap:anywhere">${esc(piece.label)}</p></article>`).join('')}</div><div class="mt-table-wrap mt-desktop-indications" style="margin-top:10px"><table><thead><tr><th>Kode batch</th><th>Nama batch</th><th>Aksi</th></tr></thead><tbody>${batches.map(piece=>`<tr><td>${esc(piece.id)}</td><td style="white-space:normal">${esc(piece.label)}</td><td>${button('admin-edit','Edit','','pencil',`data-kind="batches" data-id="${esc(piece.id)}"`)}</td></tr>`).join('')}</tbody></table></div></section>`;}
+  function filteredKeys(){const source=records;return source.filter(r=>r.kind==='master'&&(!keyMethod||r.method===keyMethod)&&(!keyPiece||r.piece===keyPiece)&&(!keyStatus||(r.status==='Deleted'?r.deletedStatus:r.status)===keyStatus));}
+  function keyList(){
+    const keys=filteredKeys(),all=records.filter(r=>r.kind==='master'),pieces=[...new Set([...testPieces.map(p=>p.id),...all.map(r=>r.piece),...adminData.keys.map(r=>r.piece)])].sort();
+    const latest=new Map();all.filter(r=>r.status==='Published').forEach(r=>{const pair=JSON.stringify([r.method,r.piece]);if(!latest.has(pair))latest.set(pair,r);});
+    const badge=r=>`<span class="mt-badge ${r.status==='Published'?'good':'warm'}">${r.status==='Published'?'Terbit':'Draft'}</span>${latest.get(JSON.stringify([r.method,r.piece]))?.id===r.id?' <span class="mt-badge good">Acuan terbaru</span>':''}`;
+    const date=r=>r.updated?new Date(r.updated).toLocaleString('id-ID'):'—';
+    return `<section class="mt-box mt-form"><h1>Daftar kunci jawaban</h1><p class="mt-subtitle">Buka Detail untuk informasi lengkap atau Edit untuk mengelola kunci.</p><div class="mt-tool-group" style="flex-wrap:wrap;margin:14px 0">${button('staff-pieces','Master Key','mt-primary','arrow-left')}${button('refresh-records','Muat ulang','','refresh-cw')}</div><div class="mt-fields"><label class="mt-field">Metode<select id="mt-key-method"><option value="">Semua metode</option>${METHODS.map(v=>`<option value="${v}" ${keyMethod===v?'selected':''}>${v}</option>`).join('')}</select></label><label class="mt-field">Test Piece<select id="mt-key-piece"><option value="">Semua Test Piece</option>${pieces.map(v=>`<option value="${esc(v)}" ${keyPiece===v?'selected':''}>${esc(v)}</option>`).join('')}</select></label><label class="mt-field">Status<select id="mt-key-status"><option value="">Semua status</option><option value="Draft" ${keyStatus==='Draft'?'selected':''}>Draft</option><option value="Published" ${keyStatus==='Published'?'selected':''}>Terbit</option></select></label></div><p class="mt-caption" style="margin:14px 0">${keys.length} kunci </p><div style="display:grid;gap:10px">${keys.map(r=>`<article class="mt-box" style="padding:14px;min-width:0"><div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><div><h3>${esc(r.piece)}</h3><span class="mt-caption">${r.method==='Penetrant Testing'?'PT':'MT'}</span> ${badge(r)}</div>${button('admin-edit','Edit','','pencil',`data-kind="keys" data-id="${esc(r.id)}"`)}</div><details style="margin-top:10px"><summary style="cursor:pointer">Detail</summary><dl class="mt-indication-card-values" style="margin-top:12px"><div><dt>Metode</dt><dd>${esc(r.method)}</dd></div><div><dt>Revisi simpan</dt><dd>${r.revision}</dd></div><div><dt>Diperbarui</dt><dd>${esc(date(r))}</dd></div><div><dt>Pembuat</dt><dd>${esc(r.nama||r.userId)}</dd></div><div style="grid-column:1/-1;overflow-wrap:anywhere"><dt>ID kunci</dt><dd>${esc(r.id)}</dd></div></dl>${r.status!=='Deleted'?button('open-key','Lihat sketch dan indikasi','','folder-open',`data-id="${esc(r.id)}"`):''}</details></article>`).join('')||'<div class="mt-empty">Tidak ada kunci yang sesuai filter. Buat kunci baru atau ubah filter.</div>'}</div></section>`;
+  }
+  function reportsManager(){const data=adminData.reports.filter(r=>r.status!=='Deleted'&&(!reviewBatch||(reviewBatch==='__UNASSIGNED__'?!r.batch:r.batch===reviewBatch)));return `<section class="mt-box mt-form"><h1>Database laporan peserta</h1><p class="mt-subtitle">Edit identitas dan pengelompokan laporan. Sketch dan temuan peserta tetap tercatat.</p>${batchFilter()}<div class="mt-tool-group" style="margin:14px 0">${button('refresh-records','Muat ulang','','refresh-cw')}</div><p class="mt-caption">${data.length} laporan </p><div style="display:grid;gap:10px;margin-top:12px">${data.map(r=>`<article class="mt-box" style="padding:14px;min-width:0;overflow-wrap:anywhere"><h3>${esc(r.nama||r.userId)}</h3><p class="mt-caption">${esc(batchLabel(r.batch))} · ${esc(r.piece)} · ${esc(r.method)} · ${esc(r.status)}</p><p class="mt-caption">ID: ${esc(r.id)}</p>${button('admin-edit','Edit','','pencil',`data-kind="reports" data-id="${esc(r.id)}"`)}</article>`).join('')||'<p class="mt-caption">Belum ada laporan dalam filter ini.</p>'}</div></section>`;}
+  function openAdminEdit(kind,id){
+    if(user?.role!=='Penguji')return;closePieceGroup();const item=adminData[kind]?.find(v=>v.id===id);if(!item)throw Error('Data tidak ditemukan. Tekan Muat ulang.');
+    if(adminDialog?.open)adminDialog.close();
+    if(kind==='keys'){openKeyManage(item);return;}
+    adminEdit={kind,item:clone(item)};if(!adminDialog){adminDialog=document.createElement('dialog');adminDialog.className='mt-detail-dialog';root.append(adminDialog);adminDialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});}
+    const report=kind==='reports',deleted=report?item.status==='Deleted':item.deleted;
+    const options=(arr,value)=>`${value&&!arr.some(v=>v.id===value)?`<option value="${esc(value)}">${esc(value)} · data historis</option>`:''}${arr.map(v=>`<option value="${esc(v.id)}" ${v.id===value?'selected':''}>${esc(v.id)}${v.label?' · '+esc(v.label):''}</option>`).join('')}`;
+    adminDialog.innerHTML=`<div class="mt-dialog-head"><div><h2>Edit ${report?'data laporan':kind==='pieces'?'Test Piece':'batch'}</h2><p>${esc(item.id)}</p></div>${button('admin-close','Tutup','mt-quiet','x')}</div><form id="mt-admin-form" class="mt-form"><fieldset style="border:0;padding:0;min-width:0" ${deleted?'disabled':''}><div class="mt-fields">${report?`<label class="mt-field full">Nama peserta<input name="nama" maxlength="120" value="${esc(item.nama)}" required></label><label class="mt-field full">Batch<select name="batch"><option value="">Tanpa batch (laporan lama)</option>${options(batches,item.batch)}</select></label><label class="mt-field full">Metode<select name="method">${METHODS.map(v=>`<option ${v===item.method?'selected':''}>${v}</option>`).join('')}</select></label><label class="mt-field full">Test Piece<select name="piece">${options(testPieces,item.piece)}</select></label><p class="mt-caption">Mengubah metode atau Test Piece mengosongkan evaluasi lama agar diperiksa ulang.</p>`:`<label class="mt-field full">${kind==='pieces'?'Test Piece ID':'Kode batch'}<input name="newId" maxlength="80" value="${esc(item.id)}" required></label><label class="mt-field full">${kind==='pieces'?'Keterangan':'Nama batch'}<input name="label" maxlength="200" value="${esc(item.label)}"></label><p class="mt-caption">Kode yang sudah dipakai laporan tetap. Nama/keterangan dapat diubah.</p>`}</div></fieldset>${kind==='pieces'&&!deleted?`<section style="margin-top:18px"><h3>Master key</h3><p class="mt-caption" style="margin:8px 0">Gunakan kode Test Piece yang sudah tersimpan. Simpan perubahan data Test Piece sebelum mengelola key.</p><div style="display:grid;gap:10px">${METHODS.map(method=>pieceKeyPanel(item,method,true)).join('')}</div></section>`:''}<p id="mt-admin-error" role="alert" class="mt-error" hidden></p><div class="mt-tool-group" style="margin-top:16px;flex-wrap:wrap"><button class="mt-btn mt-primary" type="submit">Simpan perubahan</button>${button('admin-delete','Hapus','mt-danger','trash-2')}</div><div id="mt-admin-confirm" hidden style="margin-top:16px"><p>Hapus data ini secara permanen? Data tidak dapat dipulihkan melalui aplikasi.</p>${button('admin-confirm-delete','Ya, hapus permanen','mt-danger','trash-2')}${button('admin-cancel-delete','Batal','','x')}</div></form>`;
+    adminDialog.showModal();icons();
+  }
+  function openKeyManage(item){
+    adminEdit={kind:'keys',item:clone(item)};if(!adminDialog){adminDialog=document.createElement('dialog');adminDialog.className='mt-detail-dialog';root.append(adminDialog);adminDialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});}
+    const deleted=item.status==='Deleted';adminDialog.innerHTML=`<div class="mt-dialog-head"><div><h2>Edit kunci jawaban</h2><p>${esc(item.piece)} · ${item.method==='Penetrant Testing'?'PT':'MT'}</p></div>${button('admin-close','Tutup','mt-quiet','x')}</div><form id="mt-admin-form" class="mt-form"><p>Edit sketch dan indikasi melalui editor. Kunci terbit atau milik penguji lain akan dibuatkan draft revisi; versi sebelumnya tetap tersimpan.</p><p id="mt-admin-error" class="mt-error" role="alert" hidden></p><div class="mt-tool-group" style="flex-wrap:wrap;margin-top:16px">${button('edit-key-content','Edit sketch dan indikasi','mt-primary','pencil')}${button('admin-delete','Hapus','mt-danger','trash-2')}</div><div id="mt-admin-confirm" hidden style="margin-top:16px"><p>Hapus kunci ini secara permanen? Kunci tidak dapat dipulihkan atau dipakai untuk laporan baru. Acuan pada laporan yang sudah terikat tetap tersimpan.</p>${button('admin-confirm-delete','Ya, hapus permanen','mt-danger','trash-2')}${button('admin-cancel-delete','Batal','','x')}</div></form>`;adminDialog.showModal();icons();
+  }
+  async function editKeyContent(){
+    if(busy||adminEdit?.kind!=='keys'||user?.role!=='Penguji')return;const item=adminEdit.item;busy=true;
+    try{const result=await api('reviseKey',{id:item.id,revision:item.revision,requestId:(adminEdit.revisionRequest||=crypto.randomUUID())});applyDocument(result);state.view='kunci';mobileTab='sketch';adminDialog.close();await refreshRecords();}
+    catch(error){const el=adminDialog.querySelector('#mt-admin-error');el.textContent=error.message;el.hidden=false;}
+    finally{busy=false;if(!adminDialog.open)render();}
+  }
+  async function commitAdmin(operation){
+    if(busy||!adminEdit||user?.role!=='Penguji'||!['save','delete'].includes(operation))return;const {kind,item}=adminEdit,form=adminDialog.querySelector('form'),field=name=>form.elements.namedItem(name)?.value;
+    if(kind==='keys'&&operation==='save')return;
+    const payload=(kind==='reports'||kind==='keys')?{id:item.id,revision:item.revision,operation,confirmDelete:operation==='delete',...(operation==='save'?{nama:field('nama'),batch:field('batch'),method:field('method'),piece:field('piece')}:{})}:{kind,id:item.id,version:item.version||'',operation,confirmDelete:operation==='delete',...(operation==='save'?{newId:field('newId'),label:field('label')}:{})};
+    busy=true;form.querySelectorAll('button').forEach(b=>b.disabled=true);const errorEl=form.querySelector('#mt-admin-error');errorEl.hidden=true;let committed=false;
+    try{await api(kind==='keys'?'deleteKey':kind==='reports'?(operation==='save'?'editReport':'deleteReport'):'editCatalog',payload);committed=true;adminDialog.close();if(kind==='keys'&&loaded.master?.id===item.id){loaded.master=null;active=null;state.view='keys';}if(kind==='reports'&&loaded.student?.id===item.id){loaded.student=null;loaded.master=null;active=null;state.view='penguji';}await Promise.all([refreshPieces(),refreshBatches()]);await refreshRecords();}
+    catch(error){if(committed)toast('Perubahan tersimpan. Tekan Muat ulang untuk memperbarui daftar.');else{errorEl.textContent=error.message;errorEl.hidden=false;}}
+    finally{busy=false;form.querySelectorAll('button').forEach(b=>b.disabled=false);if(committed){render();toast('Data berhasil '+(operation==='delete'?'dihapus permanen':'diperbarui')+'.');}}
+  }
+  function mobileNavigation(){
+    const tabs=[['identity','Data','user-round'],['sketch','Sketch','pen-tool'],['indications','Indikasi','list-checks'],['photo','Foto','camera'],['send','Kirim','send']];
+    return `<nav class="mt-bottom-tabs" aria-label="Bagian laporan peserta">${tabs.map(([id,label,icon])=>`<button type="button" class="cursor-interaction" data-mobile-tab="${id}" aria-current="${mobileTab===id?'page':'false'}">${ic(icon)}<span>${label}${id==='indications'&&list().length?' ('+list().length+')':''}</span></button>`).join('')}</nav>`;
+  }
+  let reportImageDialog=null,reportImageUrl='',reportImageBlob=null;
+  const canExportReport=()=>user?.role==='Peserta'&&state.submitted&&loaded.student?.id&&loaded.student.userId===user.userId;
+  function reportReceipt(){return canExportReport()?`<section data-mobile-pane="send" class="mt-box mt-report-receipt"><div class="mt-form"><h2>Laporan berhasil dikirim</h2><p class="mt-subtitle">Simpan salinan gambar sketch dan tabel indikasi ke HP.</p><p class="mt-caption" style="margin-top:10px;overflow-wrap:anywhere">ID: ${esc(loaded.student.id)}</p>${button('report-image','Simpan gambar (PNG)','mt-primary mt-wide','image-down','style="margin-top:14px"')}</div></section>`:'';}
+  function wrapImageText(ctx,text,maxWidth){
+    const lines=[];let line='';for(const char of String(text)){if(line&&ctx.measureText(line+char).width>maxWidth){lines.push(line);line=char;}else line+=char;}lines.push(line);return lines;
+  }
+  async function makeReportImage(){
+    if(!canExportReport())throw Error('Kirim laporan terlebih dahulu sebelum menyimpan gambar.');
+    const record=loaded.student,data=sorted(state.student),width=1240,margin=50;
+    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');if(!ctx)throw Error('Browser tidak mendukung pembuatan gambar.');
+    ctx.font='24px Arial';const nameLines=wrapImageText(ctx,record.nama||participantName,width-2*margin),pieceLines=wrapImageText(ctx,currentPiece,width-2*margin),batchLines=wrapImageText(ctx,'Batch: '+batchLabel(currentBatch),width-2*margin);
+    const headerHeight=315+(nameLines.length+pieceLines.length+batchLines.length)*32,sketchHeight=660,rowHeight=56;
+    canvas.width=width;canvas.height=headerHeight+sketchHeight+130+Math.max(1,data.length)*rowHeight+90;
+    ctx.fillStyle='#ffffff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#172e35';ctx.font='bold 38px Arial';ctx.fillText('Practical Report (Sketch)',margin,65);
+    let y=110;ctx.font='20px Arial';ctx.fillStyle='#64767c';ctx.fillText('Nama peserta',margin,y);y+=32;ctx.fillStyle='#172e35';ctx.font='24px Arial';nameLines.forEach(line=>{ctx.fillText(line,margin,y);y+=32;});
+    ctx.fillStyle='#64767c';ctx.font='20px Arial';batchLines.forEach(line=>{ctx.fillText(line,margin,y+8);y+=32;});ctx.fillText('Metode: '+currentMethod,margin,y+8);y+=48;ctx.fillText('Test Piece',margin,y);y+=32;ctx.fillStyle='#172e35';ctx.font='24px Arial';pieceLines.forEach(line=>{ctx.fillText(line,margin,y);y+=32;});
+    ctx.fillStyle='#64767c';ctx.font='18px Arial';ctx.fillText('ID laporan: '+record.id,margin,y+6);ctx.fillText('Waktu kirim: '+new Date(record.updated).toLocaleString('id-ID'),margin,y+35);ctx.fillText('Dimensi: '+dimensionText('student'),margin,y+64);
+    const svg=sketch('mt-export-sketch',[{owner:'student',data,color:'#0d746e'}],false);
+    const styles=`<style>.mt-grid-dot{fill:#dfe7e9}.mt-plate{fill:#fff;stroke:#64767c;stroke-width:1.3}.mt-weld{fill:#edf3f4;stroke:#64767c;stroke-width:1.1}.mt-centerline{stroke:#64767c;stroke-width:1;stroke-dasharray:12 4 2 4}.mt-guide{stroke:#dfe7e9;stroke-width:1}.mt-diagram-text{fill:#64767c;font-family:Arial}.mt-piece-label{fill:#163bb6;font-family:Arial;font-weight:bold}.mt-ind-stroke{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:3.2}.mt-ind-label{fill:#fff;font-family:Arial;font-weight:bold}</style>`;
+    const svgNamespace='http:'+String.fromCharCode(47,47)+'www.w3.org/2000/svg';
+    const xml=svg.replace('<svg ','<svg xmlns="'+svgNamespace+'" ').replace('><defs>','>'+styles+'<defs>');
+    const svgUrl=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml;charset=utf-8'}));
+    try{const img=new Image();await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('Sketch belum dapat dibuat sebagai gambar.'));img.src=svgUrl;});ctx.drawImage(img,margin,headerHeight,width-2*margin,sketchHeight);}finally{URL.revokeObjectURL(svgUrl);}
+    y=headerHeight+sketchHeight+20;ctx.fillStyle='#172e35';ctx.font='bold 25px Arial';ctx.fillText('Daftar indikasi',margin,y);y+=25;
+    const cols=[margin,130,310,490,690,930],labels=['No.','Length (mm)','Width (mm)','From Y (mm)','Round / Linear','Accept / Reject'];
+    ctx.fillStyle='#edf3f4';ctx.fillRect(margin,y,width-2*margin,rowHeight);ctx.fillStyle='#172e35';ctx.font='bold 20px Arial';labels.forEach((label,i)=>ctx.fillText(label,cols[i]+10,y+35));y+=rowHeight;
+    ctx.font='22px Arial';
+    if(!data.length){ctx.fillStyle='#172e35';ctx.fillText('Tidak ditemukan indikasi',margin+10,y+35);y+=rowHeight;}
+    data.forEach((ind,i)=>{ctx.fillStyle=i%2?'#f5f7f8':'#ffffff';ctx.fillRect(margin,y,width-2*margin,rowHeight);ctx.fillStyle='#172e35';[i+1,number(ind.length),number(ind.width),number(ind.fromY),ind.type,ind.decision].forEach((value,j)=>ctx.fillText(String(value),cols[j]+10,y+35));ctx.strokeStyle='#dfe7e9';ctx.beginPath();ctx.moveTo(margin,y+rowHeight);ctx.lineTo(width-margin,y+rowHeight);ctx.stroke();y+=rowHeight;});
+    ctx.fillStyle='#64767c';ctx.font='18px Arial';ctx.fillText('Salinan laporan peserta · Ukuran indikasi dalam mm',margin,y+45);
+    return await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('Gambar PNG tidak dapat dibuat.')),'image/png'));
+  }
+  async function openReportImage(){
+    if(!canExportReport())throw Error('Kirim laporan terlebih dahulu.');
+    if(!reportImageDialog){reportImageDialog=document.createElement('dialog');reportImageDialog.className='mt-detail-dialog mt-image-dialog';reportImageDialog.setAttribute('aria-label','Screenshot laporan');root.append(reportImageDialog);}
+    reportImageDialog.innerHTML=`<div class="mt-dialog-head"><div><h2>Screenshot laporan</h2><p>Menyiapkan gambar…</p></div>${button('close-report-image','Tutup','mt-quiet','x')}</div><div class="mt-form" id="mt-image-content" role="status">Mohon tunggu…</div>`;
+    reportImageDialog.showModal();icons();
+    try{
+      reportImageBlob=await makeReportImage();if(reportImageUrl)URL.revokeObjectURL(reportImageUrl);reportImageUrl=URL.createObjectURL(reportImageBlob);
+      const filename='Practical_Report_'+currentPiece.replace(/[^A-Za-z0-9_-]/g,'_')+'_'+loaded.student.id+'.png';
+      reportImageDialog.querySelector('.mt-dialog-head p').textContent='Sketch dan indikasi dalam satu gambar.';
+      reportImageDialog.querySelector('#mt-image-content').innerHTML=`<img class="mt-report-preview" src="${reportImageUrl}" alt="Salinan lengkap sketch dan tabel indikasi"><a class="mt-btn mt-primary mt-wide" style="margin-top:12px" href="${reportImageUrl}" download="${esc(filename)}">Unduh PNG</a>${button('share-report-image','Bagikan gambar','mt-wide','share-2','style="margin-top:8px"')}<p class="mt-caption" style="margin-top:10px">Jika unduhan tidak tersedia di HP, tekan lama gambar lalu pilih Simpan gambar.</p>`;icons();
+    }catch(error){reportImageDialog.querySelector('#mt-image-content').textContent=error.message;}
+  }
+  function sendSummary(){return `<section data-mobile-pane="send" class="mt-box mt-send-summary"><div class="mt-form"><h2>Periksa sebelum mengirim</h2><dl><dt>Nama peserta</dt><dd>${esc(participantName||user?.nama||'Belum diisi')}</dd><dt>Batch</dt><dd>${esc(state.view==='kunci'?'Semua batch':batchLabel(currentBatch))}</dd><dt>Metode</dt><dd>${esc(currentMethod||'Belum dipilih')}</dd><dt>Test Piece</dt><dd>${esc(currentPiece||'Belum dipilih')}</dd><dt>Dimensi test piece</dt><dd>${dimensionText(owner())}</dd><dt>Indikasi</dt><dd>${list().length} indikasi${state[owner()==='master'?'noMaster':'noStudent']?' · Tidak ditemukan indikasi':''}</dd><dt>Foto test piece</dt><dd>${photos[owner()]?'Sudah dilampirkan':'Tidak dilampirkan (opsional)'}</dd></dl><p class="mt-caption">${active&&!list().some(i=>i.id===active.id)?'Ada indikasi yang belum disimpan. Lengkapi ukurannya sebelum mengirim.':'Periksa kembali sketch dan ukuran sebelum mengirim laporan.'}</p></div></section>`;}
+  function editor(){
+    const master=state.view==='kunci';const locked=isLocked();const data=sorted(list());
+    if(!active&&data.length)choose(data.find(v=>v.id===state.selected)?.id||data[0].id);
+    const title=master?'Kunci jawaban':'Laporan peserta';
+    const row=ind=>`<tr class="${active?.id===ind.id?'mt-selected':''}"><td><button type="button" class="mt-number cursor-interaction" data-action="select" data-id="${esc(ind.id)}" aria-label="Pilih indikasi ${data.indexOf(ind)+1}">${data.indexOf(ind)+1}</button></td><td class="mt-mono">${number(ind.length)}</td><td class="mt-mono">${number(ind.width)}</td><td class="mt-mono">${number(ind.fromY)}</td><td>${ind.type}</td><td><span class="mt-badge ${ind.decision==='Reject'?'red':'good'}">${ind.decision}</span></td><td>${button('edit-indication','Edit','','pencil',`data-id="${esc(ind.id)}" ${loaded[owner()]&&loaded[owner()].userId!==user.userId?'disabled':''}`)}</td></tr>`;
+    const mobileCards=`<div class="mt-indication-cards" aria-label="Daftar indikasi untuk HP">${data.map((ind,index)=>`<article class="mt-indication-card ${active?.id===ind.id?'mt-selected':''}"><div class="mt-indication-card-head"><span class="mt-indication-card-title"><span class="mt-number">${index+1}</span>Indikasi ${index+1}</span>${button('edit-indication','Edit','','pencil',`data-id="${esc(ind.id)}" ${loaded[owner()]&&loaded[owner()].userId!==user.userId?'disabled':''}`)}</div><dl class="mt-indication-card-values"><div><dt>Length</dt><dd class="mt-mono">${number(ind.length)} mm</dd></div><div><dt>Width</dt><dd class="mt-mono">${number(ind.width)} mm</dd></div><div><dt>From Y</dt><dd class="mt-mono">${number(ind.fromY)} mm</dd></div><div><dt>Tipe</dt><dd>${esc(ind.type)}</dd></div><div><dt>Keputusan</dt><dd><span class="mt-badge ${ind.decision==='Reject'?'red':'good'}">${esc(ind.decision)}</span></dd></div></dl></article>`).join('')}</div>`;
+    return `<div class="mt-page-head"><div><h2>${title}</h2><p class="mt-subtitle">${master?'Acuan pemeriksaan untuk benda uji yang dipilih.':'Catat setiap indikasi, dari temuan ke laporan.'}</p></div><span class="mt-badge ${locked?'good':'warm'}">${locked?(master?'Terbit':'Terkirim'):'Draft'}</span></div><div class="mt-meta"><div class="mt-meta-item"><span>${master?'VERSI KUNCI':'NAMA PESERTA'}</span><strong>${master?'Kunci tersimpan':esc(user?.nama||'')}</strong></div><div class="mt-meta-item"><span>BATCH</span><strong>${esc(state.view==='kunci'?'Semua batch':batchLabel(currentBatch))}</strong></div><div class="mt-meta-item"><span>TEST PIECE</span><strong class="mt-mono">${esc(currentPiece)}</strong></div><div class="mt-meta-item"><span>METODE</span><strong>${esc(currentMethod||'Belum dipilih')}</strong></div><div class="mt-meta-item"><span>DIMENSI</span><strong class="mt-mono">${dimensionText(owner())}</strong></div><div class="mt-meta-item"><span>TANGGAL</span><strong>${new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short',year:'numeric'}).format(new Date())}</strong></div></div><div class="mt-editor-layout"><div><section data-mobile-pane="sketch" class="mt-box"><div class="mt-box-head"><div><h2>Sketch benda uji</h2><span class="mt-caption">Tampak atas · datum kiri Y</span></div>${button('add','Add Indication','mt-primary','plus',locked||drawing?'disabled':'')}</div>${dimensionPanel()}<div class="mt-canvas-toolbar"><span class="mt-caption">${drawing?'Mode gambar aktif':'Pilih indikasi untuk melihat detail'}</span><div class="mt-tool-group">${button('undo','','mt-icon-btn','undo-2',`aria-label="Undo goresan" ${!drawing||!active?.strokes.length?'disabled':''}`)}${active&&!locked?button('clear-strokes','Hapus goresan','mt-quiet','eraser'):''}${button('redraw',drawing?'Selesai menggambar':'Lanjut gambar',drawing?'':'mt-quiet',drawing?'check':'pencil',locked||!active?'disabled':'')}</div></div>${drawing?'<div class="mt-draw-note"><span>Gambar indikasi, lalu tekan Selesai menggambar untuk mengisi ukuran. Beberapa goresan dapat menjadi satu indikasi.</span></div>':''}<div class="mt-canvas">${sketch('mt-editor-sketch',[{owner:owner(),data:list().map(v=>active?.id===v.id?active:v),color:'var(--mt-accent)'}],true)}</div><div class="mt-canvas-note"><span>${ic('arrow-right')}Nomor otomatis dari kiri ke kanan</span><span class="mt-mono">mm</span></div></section><section data-mobile-pane="indications" class="mt-indication-list"><div class="mt-list-head"><h2>Daftar indikasi <span class="mt-counter">${data.length}</span></h2><span class="mt-caption">Urut From Y ↑</span></div>${data.length?`${mobileCards}<div class="mt-table-wrap mt-desktop-indications"><table aria-label="Indikasi urut kiri ke kanan"><thead><tr><th>No.</th><th>Length</th><th>Width</th><th>From Y</th><th>Tipe</th><th>Keputusan</th><th>Aksi</th></tr></thead><tbody>${data.map(row).join('')}</tbody></table></div>`:'<div class="mt-box mt-empty">Sketch masih kosong. Tambahkan indikasi pertama.</div>'}<label class="mt-no-ind"><input type="checkbox" id="mt-no-indications" ${state[master?'noMaster':'noStudent']?'checked':''} ${data.length||locked?'disabled':''}>Tidak ditemukan indikasi</label></section></div><aside><div class="mt-inline-details">${formPanel()}</div><div data-mobile-pane="photo">${photoPanel(owner())}</div></aside></div>${sendSummary()}${reportReceipt()}<footer data-mobile-pane="send" class="mt-bottom-actions"><span class="mt-caption">${ic(draftSaved?'check-check':'shield-check')}${draftSaved?'Draft tersimpan di server':'Kunci hanya terlihat oleh penguji'}</span><div class="mt-tool-group">${locked?button('reopen','Edit sebagai revisi baru','','pencil',loaded[owner()]?.userId!==user.userId?'disabled':''):button('save-draft','Simpan draft','','save')}${button('submit',locked?(user?.role==='Penguji'?(master?'Master Key':'Buka Examination'):'Laporan terkirim'):master?'Terbitkan kunci':'Kirim laporan','mt-primary',locked?'arrow-right':'arrow-up-right')}</div></footer>${mobileNavigation()}`;
+  }
+  function delta(a,b){if(b==null)return '—';const d=Math.round((b-a)*100)/100;return `${d>0?'+':''}${number(d)} mm`;}
+  function reviewList(){
+    const list=filteredReviewRecords();
+    const batchTxt=reviewBatch?batchLabel(reviewBatch):'Semua batch';
+    const methodTxt=currentMethod||'Semua metode';
+    const pieceTxt=currentPiece||'Semua Test Piece';
+    return `<section class="mt-box" style="margin-top:18px">
+      <div class="mt-box-head">
+        <div>
+          <h2>Daftar Laporan Peserta</h2>
+          <span class="mt-caption">Filter: <strong>${esc(batchTxt)}</strong> · <strong>${esc(methodTxt)}</strong>${currentPiece?` · <strong>${esc(pieceTxt)}</strong>`:''} · Ditemukan: <strong>${list.length} laporan</strong></span>
+        </div>
+        ${button('refresh-records','Muat ulang','','refresh-cw')}
+      </div>
+      ${list.length?`
+        <div class="mt-table-wrap mt-desktop-indications">
+          <table aria-label="Daftar laporan peserta">
+            <thead>
+              <tr>
+                <th style="width:40px">No.</th>
+                <th>Nama Peserta</th>
+                <th>Batch</th>
+                <th>Metode</th>
+                <th>Test Piece</th>
+                <th>Status Evaluasi</th>
+                <th>Waktu Kirim</th>
+                <th style="text-align:right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map((r,i)=>{
+                const isReviewed=r.status==='Reviewed';
+                const isCurrent=loaded.student?.id===r.id;
+                const dateStr=r.updated?new Date(r.updated).toLocaleString('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+                return `<tr class="${isCurrent?'mt-selected':''}">
+                  <td class="mt-mono">${i+1}</td>
+                  <td><strong>${esc(r.nama||r.userId)}</strong><small class="mt-caption" style="display:block;color:var(--mt-muted);font-size:10px">ID: ${esc(r.id.slice(0,8))}…</small></td>
+                  <td><span class="mt-mono">${esc(batchLabel(r.batch))}</span></td>
+                  <td><span class="mt-badge">${r.method==='Penetrant Testing'?'PT':'MT'}</span> <span class="mt-caption">${esc(r.method)}</span></td>
+                  <td><strong class="mt-mono">${esc(r.piece)}</strong></td>
+                  <td>
+                    <span class="mt-badge ${isReviewed?'good':'warm'}">${isReviewed?'🟢 Sudah dievaluasi':'🟡 Menunggu evaluasi'}</span>
+                    ${r.evaluation?.result?`<div class="mt-caption" style="font-weight:600;margin-top:2px;color:${r.evaluation.result==='Sesuai'?'var(--mt-accent)':'var(--mt-orange)'}">${esc(r.evaluation.result)}</div>`:''}
+                  </td>
+                  <td class="mt-mono mt-caption">${dateStr}</td>
+                  <td style="text-align:right">
+                    ${button('admin-edit','Edit','','pencil',`data-kind="reports" data-id="${esc(r.id)}"`)}${button('open-specific-report',isReviewed?'Lihat Evaluasi':'Periksa',isReviewed?'':'mt-primary',isReviewed?'clipboard-check':'scan-line',`data-id="${esc(r.id)}"`)}
+                  </td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-indication-cards" style="padding:12px" aria-label="Daftar laporan peserta untuk HP">
+          ${list.map((r,i)=>{
+            const isReviewed=r.status==='Reviewed';
+            const isCurrent=loaded.student?.id===r.id;
+            const dateStr=r.updated?new Date(r.updated).toLocaleString('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+            return `<article class="mt-indication-card ${isCurrent?'mt-selected':''}">
+              <div class="mt-indication-card-head">
+                <span class="mt-indication-card-title"><span class="mt-number">${i+1}</span><strong>${esc(r.nama||r.userId)}</strong></span>
+                <span class="mt-badge ${isReviewed?'good':'warm'}">${isReviewed?'Sudah dievaluasi':'Menunggu evaluasi'}</span>
+              </div>
+              <dl class="mt-indication-card-values">
+                <div><dt>Batch</dt><dd class="mt-mono">${esc(batchLabel(r.batch))}</dd></div>
+                <div><dt>Metode</dt><dd>${esc(r.method)}</dd></div>
+                <div><dt>Test Piece</dt><dd class="mt-mono"><strong>${esc(r.piece)}</strong></dd></div>
+                <div><dt>Waktu Kirim</dt><dd class="mt-mono">${dateStr}</dd></div>
+                ${r.evaluation?.result?`<div><dt>Hasil</dt><dd><strong>${esc(r.evaluation.result)}</strong></dd></div>`:''}
+              </dl>
+              <div style="margin-top:10px">
+                ${button('admin-edit','Edit','','pencil',`data-kind="reports" data-id="${esc(r.id)}"`)}${button('open-specific-report',isReviewed?'Lihat Evaluasi':'Periksa Laporan Ini',isReviewed?'mt-wide':'mt-primary mt-wide',isReviewed?'clipboard-check':'scan-line',`data-id="${esc(r.id)}"`)}
+              </div>
+            </article>`;
+          }).join('')}
+        </div>
+      `:`
+        <div class="mt-box mt-empty" style="border:none;padding:36px 16px;text-align:center">
+          <p style="font-weight:600;font-size:14px;margin-bottom:6px">Tidak ada laporan peserta ditemukan</p>
+          <p class="mt-caption">Belum ada laporan peserta yang dikirim untuk filter batch <strong>${esc(batchTxt)}</strong> dan metode <strong>${esc(methodTxt)}</strong>.</p>
+        </div>
+      `}
+    </section>`;
+  }
+  function review(){
+    const masters=sorted(state.master),students=sorted(state.student);const matched=masters.filter(m=>students.some(s=>s.id===state.pairs[m.id])).length;
+    const extras=students.filter(s=>!Object.values(state.pairs).includes(s.id)).length;
+    const rows=masters.map((m,i)=>{const s=students.find(s=>s.id===state.pairs[m.id]);return `<tr><td><span class="mt-number">${i+1}</span></td><td><select class="mt-pair-select" data-pair="${m.id}" aria-label="Pasangan untuk kunci ${i+1}"><option value="">Terlewat</option>${students.map((v,j)=>`<option value="${v.id}" ${s?.id===v.id?'selected':''}>Indikasi ${j+1}</option>`).join('')}</select></td>${['length','width','fromY'].map(k=>`<td class="mt-mono">${number(m[k])} → ${s?number(s[k]):'—'}<span class="mt-delta ${s&&m[k]!==s[k]?'different':''}">Δ ${delta(m[k],s?.[k])}</span></td>`).join('')}<td>${m.type}<span class="mt-delta">${s?s.type:'—'}</span></td><td><span class="mt-badge ${!s?'warm':m.decision===s.decision?'good':'red'}">${!s?'Terlewat':m.decision===s.decision?'Sama':'Berbeda'}</span><span class="mt-delta">${m.decision} → ${s?.decision||'—'}</span></td></tr>`;}).join('');
+    const navBar=`<div class="mt-review-nav-bar" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;padding:10px 14px;background:var(--mt-paper);border:1px solid var(--mt-line);border-radius:var(--mt-radius)">${button('back-to-list','Kembali ke daftar laporan','','arrow-left')}<span class="mt-caption" style="font-size:12px">Sedang memeriksa: <strong>${esc(loaded.student?.nama||loaded.student?.userId)}</strong> · <span class="mt-mono">${esc(loaded.student?.piece)}</span> (${esc(loaded.student?.method)})</span></div>`;
+    return `${navBar}<div class="mt-page-head"><div><div class="mt-eyebrow">REVIEW WORKSPACE</div><h1>Examination<span style="color:var(--mt-muted)">.</span></h1><p class="mt-subtitle">Bandingkan temuan. Berikan feedback yang tepat.</p></div><span class="mt-badge ${state.feedback?'good':'warm'}">${state.feedback?'Sudah dievaluasi':'Menunggu evaluasi'}</span></div><div class="mt-meta"><div class="mt-meta-item"><span>PESERTA</span><strong>${esc(loaded.student?.nama||loaded.student?.userId||user?.nama||'')}</strong></div><div class="mt-meta-item"><span>BATCH</span><strong>${esc(state.view==='kunci'?'Semua batch':batchLabel(currentBatch))}</strong></div><div class="mt-meta-item"><span>TEST PIECE</span><strong class="mt-mono">${esc(currentPiece)}</strong></div><div class="mt-meta-item"><span>KUNCI ACUAN</span><strong>${esc(loaded.master?.id?.slice(0,8)||'Belum tersedia')}</strong></div></div><div class="mt-review-toolbar"><div class="mt-legend"><span><span class="mt-swatch"></span>Kunci jawaban</span><span><span class="mt-swatch student"></span>Peserta</span></div><div class="mt-segment" role="group" aria-label="Mode komparasi"><button type="button" class="cursor-interaction" data-compare="side" aria-pressed="${state.compare==='side'}">${ic('columns-2')}Berdampingan</button><button type="button" class="cursor-interaction" data-compare="overlay" aria-pressed="${state.compare==='overlay'}">${ic('layers-2')}Overlay</button></div></div>${state.compare==='side'?`<div class="mt-comparison"><section class="mt-box mt-review-card"><div class="mt-box-head"><h3>Kunci jawaban</h3><span class="mt-caption">${masters.length} indikasi · ${dimensionText('master')}</span></div><div class="mt-canvas">${sketch('mt-master-preview',[{owner:'master',data:masters,color:'var(--mt-blue)'}])}</div></section><section class="mt-box mt-review-card"><div class="mt-box-head"><h3>Jawaban peserta</h3><span class="mt-caption">${students.length} indikasi · ${dimensionText('student')}</span></div><div class="mt-canvas">${sketch('mt-student-preview',[{owner:'student',data:students,color:'var(--mt-orange)',dash:true}])}</div></section></div>`:`<section class="mt-box"><div class="mt-box-head"><h3>Overlay sketch</h3><span class="mt-caption">Skematis · Kunci ${dimensionText('master')} · Peserta ${dimensionText('student')}</span></div><div class="mt-canvas">${sketch('mt-overlay-preview',[{owner:'master',data:masters,color:'var(--mt-blue)'},{owner:'student',data:students,color:'var(--mt-orange)',opacity:state.opacity/100,dash:true}])}</div><label class="mt-overlay-controls">Opasitas peserta<input id="mt-opacity" type="range" min="15" max="100" value="${state.opacity}"><span id="mt-opacity-value" class="mt-mono">${state.opacity}%</span></label></section>`}<details class="mt-photo-details" ${photos.student||photos.master?'open':''}><summary class="cursor-interaction">Foto test piece · ${[photos.student,photos.master].filter(Boolean).length} foto dilampirkan</summary><div class="mt-photo-review">${photoPanel('master',true)}${photoPanel('student',true)}</div></details><section class="mt-review-table"><div class="mt-list-head"><h2>Komparasi indikasi</h2><span class="mt-caption">Kunci → Peserta</span></div><div class="mt-table-wrap"><table aria-label="Perbandingan data indikasi"><thead><tr><th>Kunci</th><th>Pasangan</th><th>Length</th><th>Width</th><th>From Y</th><th>Tipe</th><th>Keputusan</th></tr></thead><tbody>${rows||'<tr><td colspan="7">Kunci tidak memiliki indikasi.</td></tr>'}</tbody></table></div><div class="mt-review-summary"><span><strong>${matched}</strong> terpasang</span><span><strong>${masters.length-matched}</strong> terlewat</span><span><strong>${extras}</strong> tambahan</span><span>Selisih ukuran dalam mm</span></div></section><section class="mt-box mt-evaluation"><div class="mt-list-head"><h2>Evaluasi penguji</h2><span class="mt-caption">Keputusan manual</span></div><div class="mt-evaluation-grid"><label class="mt-field">Hasil pemeriksaan<select id="mt-result"><option ${state.result==='Sesuai'?'selected':''}>Sesuai</option><option ${state.result==='Perlu Perbaikan'?'selected':''}>Perlu Perbaikan</option></select></label><label class="mt-field">Catatan untuk peserta<textarea id="mt-review-note" placeholder="Tuliskan feedback yang dapat ditindaklanjuti…">${esc(state.note)}</textarea></label></div><div class="mt-feedback-actions"><label class="mt-no-ind"><input type="checkbox" id="mt-publish-feedback" ${state.feedback?'checked':''}>Bagikan catatan kepada peserta</label>${button('save-review','Simpan evaluasi','mt-primary','check-check')}</div></section><div style="margin-top:16px;text-align:left">${button('back-to-list','Kembali ke daftar laporan peserta','','arrow-left')}</div>`;
+  }
+  function resizeLabels(){applyReviewerMobileLayout();root.querySelectorAll('.mt-sketch').forEach(svg=>{const w=svg.getBoundingClientRect().width;if(!w)return;const base=Math.max(17,11*760/w);svg.querySelectorAll('.mt-diagram-text').forEach(t=>t.style.fontSize=base+'px');svg.querySelectorAll('.mt-ind-label').forEach(t=>{t.style.fontSize=base+'px';const circle=t.previousElementSibling;if(circle?.tagName==='circle')circle.setAttribute('r',Math.max(14,base*.76));});});}
+  const reviewerTabs=['penguji','pieces','batches'];
+  let reviewerSwipe=null,reviewerClickSuppressedUntil=0;
+  const mobileReviewer=()=>globalThis.matchMedia?.('(max-width:720px)').matches===true;
+  function applyReviewerMobileLayout(){
+    if(!content.style)return;const mobile=mobileReviewer(),enabled=user?.role==='Penguji'&&reviewerTabs.includes(state.view);content.style.touchAction=mobile&&enabled?'pan-y':'auto';
+    const nav=content.querySelector('.mt-reviewer-sections');if(!nav)return;
+    Object.assign(nav.style,mobile?{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:'4px',position:'sticky',top:'0px',zIndex:'15',background:'var(--mt-paper)',padding:'6px 0px',borderBottom:'1px solid var(--mt-line)'}:{display:'flex',gridTemplateColumns:'',gap:'8px',position:'static',top:'',zIndex:'',padding:'',borderBottom:''});
+    nav.querySelectorAll('button').forEach(b=>Object.assign(b.style,mobile?{minWidth:'0px',minHeight:'44px',padding:'8px 4px',fontSize:'11px',justifyContent:'center'}:{minWidth:'',minHeight:'',padding:'',fontSize:'',justifyContent:''}));
+  }
+  function captureReviewerPane(){if(user?.role!=='Penguji')return;const form=root.querySelector('#mt-batch-form');if(form)reviewerPaneDrafts.batches={batchId:form.elements.namedItem('batchId').value,label:form.elements.namedItem('label').value};}
+  function changeReviewerTab(view){
+    if(user?.role!=='Penguji'||busy||!reviewerTabs.includes(view)||view===state.view)return false;
+    const previous=reviewerTabs.indexOf(state.view);captureForm();captureReviewerPane();state.view=view;active=null;drawing=false;render();
+    if(mobileReviewer()){
+      const reduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+      if(!reduced&&content.animate)content.animate([{transform:`translateX(${reviewerTabs.indexOf(view)>previous?'8%':'-8%'})`,opacity:.6},{transform:'translateX(0)',opacity:1}],{duration:180,easing:'ease-out'});
+      content.scrollIntoView?.({block:'start',behavior:reduced?'auto':'smooth'});
+    }return true;
+  }
+  function reviewerSwipeStart(e){
+    reviewerSwipe=null;if(!mobileReviewer()||user?.role!=='Penguji'||busy||drawing||!reviewerTabs.includes(state.view)||e.isPrimary===false||(e.pointerType==='mouse'&&e.button!==0)||root.querySelector('dialog[open]'))return;
+    const nav=e.target.closest('.mt-reviewer-sections');if(!nav&&e.target.closest('input,textarea,select,button,a,summary,form,svg,canvas,dialog,.mt-table-wrap,[data-no-swipe]'))return;
+    reviewerSwipe={id:e.pointerId,x:e.clientX,y:e.clientY,time:Date.now(),view:state.view,horizontal:false};
+  }
+  function reviewerSwipeMove(e){
+    const g=reviewerSwipe;if(!g||g.id!==e.pointerId)return;const dx=e.clientX-g.x,dy=e.clientY-g.y;
+    if(Math.abs(dy)>20&&Math.abs(dy)>Math.abs(dx)){reviewerSwipe=null;return;}
+    if(Math.abs(dx)>18&&Math.abs(dx)>Math.abs(dy)*1.5){g.horizontal=true;e.preventDefault();content.setPointerCapture?.(e.pointerId);}
+  }
+  function reviewerSwipeEnd(e){
+    const g=reviewerSwipe;reviewerSwipe=null;if(!g||g.id!==e.pointerId||!mobileReviewer()||busy||root.querySelector('dialog[open]')||state.view!==g.view)return;
+    const dx=e.clientX-g.x,dy=e.clientY-g.y;if(Math.abs(dx)<56||Math.abs(dx)<Math.abs(dy)*1.5||Math.abs(dy)>90||Date.now()-g.time>800)return;
+    const next=reviewerTabs.indexOf(state.view)+(dx<0?1:-1);if(next<0||next>=reviewerTabs.length)return;
+    reviewerClickSuppressedUntil=Date.now()+350;changeReviewerTab(reviewerTabs[next]);
+  }
+  function render(){
+    closeDetails();
+    content.setAttribute?.('data-reviewer-swipe',String(user?.role==='Penguji'&&reviewerTabs.includes(state.view)));
+    root.querySelectorAll('[data-role-tab]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.roleTab===(user?.role==='Penguji'?'penguji':'peserta'))));
+    root.setAttribute?.('data-mobile-tab',mobileTab);
+    root.setAttribute?.('data-mobile-layout',user&&['peserta','kunci'].includes(state.view)?'tabs':'full');
+    root.querySelectorAll('[data-view]').forEach(el=>{if(el.dataset.view===state.view||(el.dataset.view==='kunci'&&['pieces','keys'].includes(state.view)))el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
+    root.querySelector('#mt-breadcrumb').textContent=({peserta:'Laporan peserta',kunci:'Kunci jawaban',penguji:'Examination',pieces:'Master Key',batches:'Database Batch',reports:'Database laporan peserta',keys:'Daftar kunci jawaban'})[state.view];
+    root.querySelectorAll('[data-view]').forEach(el=>{el.hidden=!user||(user.role==='Penguji'?el.dataset.view==='peserta':el.dataset.view!=='peserta');});
+    root.querySelector('#mt-session-batch').textContent=user?.role==='Penguji'?(reviewBatch==='__UNASSIGNED__'?'Tanpa batch':reviewBatch?batchLabel(reviewBatch):'Semua batch'):(currentBatch?batchLabel(currentBatch):'Pilih batch training');
+    root.querySelector('.mt-sidebar-bottom div').textContent=user?user.nama+' · '+user.role:'';
+    if(!user){showLogin();icons();return;}
+    content.innerHTML=(user.role==='Penguji'?`<nav class="mt-reviewer-sections" aria-label="Menu penguji">${button('staff-review','Examination',state.view==='penguji'?'mt-primary':'','scan-line')}${button('staff-pieces','Master Key',['pieces','keys','kunci'].includes(state.view)?'mt-primary':'','database')}${button('staff-batches','Batch',state.view==='batches'?'mt-primary':'','users')}</nav>`:'')+(['pieces','batches','reports','keys'].includes(state.view)?'':connectionPanel())+((loaded.student?.status==='Submitted'&&!loaded.student.keyId&&['peserta','penguji'].includes(state.view))?'<p class="mt-draw-note" role="status">Laporan sudah dikirim. Jika kunci belum tersedia, penguji dapat menerbitkannya sebelum evaluasi.</p>':'')+(state.view==='kunci'?`<div class="mt-tool-group" style="margin-bottom:16px">${button('staff-pieces','Master Key','','arrow-left')}</div>`:'')+(state.view==='keys'?keyList():state.view==='batches'?batchManager():state.view==='pieces'?pieceManager():state.view==='penguji'?(loaded.student&&loaded.student.status!=='Draft'?review():reviewList()):editor());
+    if(state.view==='peserta'&&loaded.student?.evaluation?.published){const info=document.createElement('section');info.className='mt-box mt-form';const h=document.createElement('h2');h.textContent=loaded.student.evaluation.result;const p=document.createElement('p');p.textContent=loaded.student.evaluation.note;info.append(h,p);content.append(info);}
+    applyReviewerMobileLayout();
+    root.querySelectorAll('button').forEach(button=>{if(busy)button.disabled=true;});icons();requestAnimationFrame(resizeLabels);persist();
+  }
+  let detailDialog=null;
+  function closeDetails(){
+    if(!detailDialog)return;
+    if(detailDialog.open)detailDialog.close();
+    detailDialog.querySelector('.mt-dialog-body').replaceChildren();
+  }
+  function openDetails(){
+    if(!active)return;
+    if(!detailDialog){
+      detailDialog=document.createElement('dialog');detailDialog.className='mt-detail-dialog';
+      detailDialog.setAttribute('aria-labelledby','mt-dialog-title');
+      detailDialog.innerHTML=`<div class="mt-dialog-head"><div><h2 id="mt-dialog-title">Detail ukuran indikasi</h2><p>Lengkapi ukuran dan keputusan, lalu simpan.</p></div>${button('close-details','Kembali','','x')}</div><div class="mt-dialog-body"></div>`;
+      detailDialog.addEventListener('cancel',event=>{event.preventDefault();captureForm();closeDetails();render();});
+      root.append(detailDialog);
+    }
+    const form=root.querySelector('#mt-indication-form');if(!form)return;
+    detailDialog.querySelector('.mt-dialog-body').replaceChildren(form.closest('.mt-box'));
+    detailDialog.showModal();icons();persist();
+    const first=form.elements.namedItem('length');if(first&&!first.disabled)first.focus();
+  }
+  function collect(){
+    if(!active)return false;const form=root.querySelector('#mt-indication-form');if(!form)return false;
+    const values={};let error='';
+    for(const k of ['length','width','fromY']){const raw=form.elements.namedItem(k).value.trim();if(!/^\d+(?:[.,]\d{1,2})?$/.test(raw)){error='Isi ukuran dengan angka yang valid (maks. 2 desimal).';break;}values[k]=Number(raw.replace(',','.'));}
+    if(!error&&(values.length<=0||values.width<=0))error='Length dan Width harus lebih dari 0 mm.';
+    if(!error&&(values.fromY<0||values.fromY>dimensions[owner()].length))error='From Y harus antara 0 dan '+number(dimensions[owner()].length)+' mm.';
+    for(const k of ['type','decision']){values[k]=form.elements.namedItem(k).value;if(!values[k])error='Pilih tipe indikasi dan keputusan.';}
+    if(!error&&!active.strokes.some(s=>s.length))error='Gambar indikasinya terlebih dahulu pada sketch.';
+    if(error){const el=root.querySelector('#mt-field-error');el.textContent=error;el.hidden=false;el.scrollIntoView?.({block:'nearest',behavior:'smooth'});return false;}
+    Object.assign(active,values,{remark:form.elements.namedItem('remark').value});return true;
+  }
+  function captureForm(){const f=root.querySelector('#mt-indication-form');if(!f||!active)return;for(const k of ['length','width','fromY','type','decision','remark'])active[k]=f.elements.namedItem(k).value;}
+  root.addEventListener('click',async event=>{try{
+    if(busy)return;
+    if(Date.now()<reviewerClickSuppressedUntil){event.preventDefault();return;}
+    const roleTab=event.target.closest('button[data-role-tab]');
+    if(roleTab){if(roleTab.dataset.roleTab==='peserta'){if(user?.role==='Penguji')await returnParticipant();}else if(user?.role!=='Penguji')openReviewerLogin();else{state.view='penguji';render();}return;}
+    const tab=event.target.closest('button[data-mobile-tab]');
+    if(tab){
+      captureForm();
+      // Commit form edits to memory before rebuilding the tab, without forcing a server save.
+      mobileTab=tab.dataset.mobileTab;
+      if(mobileTab==='send'&&active&&!list().some(i=>i.id===active.id)&&active.strokes.length){render();openDetails();toast('Lengkapi ukuran dan simpan indikasi sebelum mengirim.');return;}
+      render();persist();root.querySelector('#mt-content')?.scrollIntoView({block:'start',behavior:'smooth'});return;
+    }
+    const view=event.target.closest('[data-view]');if(view){if(!user||(user.role!=='Penguji'&&view.dataset.view!=='peserta'))return;state.view=view.dataset.view==='kunci'?'pieces':(user.role==='Penguji'&&view.dataset.view==='peserta'?'penguji':view.dataset.view);active=null;drawing=false;render();persist();return;}
+    const mode=event.target.closest('[data-compare]');if(mode){state.compare=mode.dataset.compare;render();persist();return;}
+    const sel=event.target.closest('[data-select]');if(sel&&state.view!=='penguji'&&!drawing){choose(sel.dataset.select);render();return;}
+    const btn=event.target.closest('[data-action]');if(!btn||btn.disabled)return;const action=btn.dataset.action;
+    if(action==='staff-login'){openReviewerLogin();return;}
+    if(action==='close-reviewer'){reviewerDialog.close();return;}
+    if(action==='create-key'){if(user?.role!=='Penguji')return;closePieceGroup();if(adminDialog?.open)adminDialog.close();const method=btn.dataset.method,piece=btn.dataset.piece;if(!METHODS.includes(method)||!testPieces.some(p=>p.id===piece)){state.view='pieces';render();toast('Pilih Test Piece dan metode untuk membuat master key.');return;}state.view='kunci';currentMethod=method;currentPiece=piece;loaded.master=null;reviseSource.master=null;state.master=[];photos.master=null;dimensions.master=defaultDimensions();dimensionsApplied.master=false;dimensionsEditing.master=false;state.published=false;state.noMaster=false;active=null;drawing=false;draftSaved=false;mobileTab='identity';render();return;}
+    if(action==='piece-key-history'){closePieceGroup();if(adminDialog?.open)adminDialog.close();keyPiece=btn.dataset.piece;keyMethod=btn.dataset.method;keyStatus='';showTrash.keys=false;state.view='keys';active=null;drawing=false;render();return;}
+    if(action==='open-key'){closePieceGroup();if(adminDialog?.open)adminDialog.close();if(user?.role!=='Penguji'||!records.some(r=>r.id===btn.dataset.id&&r.kind==='master'))return;state.view='kunci';mobileTab='sketch';await openSavedReport(btn.dataset.id);return;}
+    if(action==='edit-piece-group'){openPieceGroup(btn.dataset.base);return;}
+    if(action==='close-piece-group'){closePieceGroup();return;}
+    if(action==='add-test-piece'){openTestPieceDialog();return;}
+    if(action==='close-add-piece'){testPieceDialog?.close();return;}
+    if(action==='staff-reports'){if(user?.role!=='Penguji')return;state.view='penguji';active=null;drawing=false;render();return;}
+    if(action==='edit-key-content'){await editKeyContent();return;}
+    if(action==='admin-edit'){openAdminEdit(btn.dataset.kind,btn.dataset.id);return;}
+    if(action==='admin-close'){adminDialog.close();return;}
+    if(action==='admin-delete'){adminDialog.querySelector('#mt-admin-confirm').hidden=false;return;}
+    if(action==='admin-cancel-delete'){adminDialog.querySelector('#mt-admin-confirm').hidden=true;return;}
+    if(action==='admin-confirm-delete'){await commitAdmin('delete');return;}
+    if(action==='staff-batches'){changeReviewerTab('batches');return;}
+    if(action==='staff-key'||action==='staff-review'||action==='staff-pieces'){changeReviewerTab(action==='staff-review'?'penguji':'pieces');return;}
+    if(action==='logout'){clearReviewerSession();if(token)await api('logout');token='';user={role:'Peserta',guest:true,userId:'',nama:''};participantName='';state.view='peserta';rememberGuest();records=[];state.student=[];state.master=[];photos.student=null;photos.master=null;loaded.student=null;loaded.master=null;active=null;render();return;}
+    if(action==='report-image'){await openReportImage();return;}
+    if(action==='close-report-image'){reportImageDialog.close();return;}
+    if(action==='share-report-image'){
+      if(!reportImageBlob)return;
+      const file=new File([reportImageBlob],'Practical_Report.png',{type:'image/png'});
+      if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Practical Report (Sketch)'});}catch(error){if(error.name!=='AbortError')toast('Gunakan tombol Unduh PNG untuk menyimpan gambar.');}}
+      else toast('Gunakan Unduh PNG atau tekan lama gambar untuk menyimpannya.');return;
+    }
+    if(action==='back-to-list'){loaded.student=null;loaded.master=null;state.student=[];state.master=[];photos.student=null;photos.master=null;active=null;drawing=false;render();return;}
+    if(action==='open-specific-report'){const id=btn.dataset.id;if(!id||busy)return;await openSavedReport(id);return;}
+    if(action==='open-report'){await openSavedReport(root.querySelector('#mt-record')?.value);return;}
+    if(action==='refresh-records'){busy=true;try{await refreshBatches();await refreshPieces();await refreshRecords();}finally{busy=false;render();}toast('Daftar batch, Test Piece, dan laporan sudah dimuat ulang.');return;}
+    if(action==='new-report'){if(state.view==='kunci'){state.view='pieces';active=null;drawing=false;render();return;}if(state.view==='penguji'){toast('Buka Laporan peserta atau Kunci jawaban untuk membuat laporan.');return;}const which=owner();if(which==='student')currentBatch='';currentPiece='';currentMethod='';dimensions[which]=defaultDimensions();dimensionsApplied[which]=false;dimensionsEditing[which]=false;mobileTab='identity';reviseSource[which]=null;state[which]=[];loaded[which]=null;photos[which]=null;state[which==='master'?'published':'submitted']=false;state[which==='master'?'noMaster':'noStudent']=false;active=null;drawing=false;render();return;}
+    if(action==='add'){
+      if(isLocked())return;
+      if(!dimensionsApplied[owner()]){
+        mobileTab='sketch';
+        render();
+        openDimensionDialog();
+        return;
+      }
+      mobileTab='sketch';const idx=Math.max(0,...list().map(v=>v.order))+1;active={id:owner()[0]+Date.now().toString(36),order:idx,length:'',width:'',fromY:'',type:'',decision:'',remark:'',strokes:[]};drawing=true;undoStack=[];render();return;
+    }
+    if(action==='edit-dimensions'){openDimensionDialog();return;}
+    if(action==='hide-dimensions'){dimensionDialog?.close();return;}
+    if(action==='select'){choose(btn.dataset.id);render();return;}
+    if(action==='redraw'){
+      captureForm();
+      if(drawing){
+        if(!active?.strokes.some(stroke=>stroke.length)){toast('Gambar indikasi terlebih dahulu.');return;}
+        drawing=false;render();openDetails();
+      }else{drawing=true;render();}return;
+    }
+    if(action==='close-details'){captureForm();closeDetails();render();return;}
+    if(action==='undo'&&active){captureForm();if(active.strokes.length)undoStack.push(active.strokes.pop());render();return;}
+    if(action==='save-indication'&&collect()){
+      const at=list().findIndex(v=>v.id===active.id);if(at<0)list().push(clone(active));else list()[at]=clone(active);state[owner()==='master'?'noMaster':'noStudent']=false;state.selected=active.id;drawing=false;draftSaved=false;mobileTab='indications';render();await saveRemote(false);toast('Indikasi dan draft berhasil disimpan ke server. Nomor diurutkan berdasarkan From Y.');return;
+    }
+    if(action==='delete-indication'&&active){state[owner()]=list().filter(v=>v.id!==active.id);active=null;state.selected='';drawing=false;render();persist();toast('Indikasi dihapus dan nomor diperbarui.');return;}
+    if(action==='cancel'){active=null;drawing=false;render();return;}
+    if(action==='save-draft'){if(active&&!isLocked()){if(!collect())return;const at=list().findIndex(v=>v.id===active.id);if(at<0)list().push(clone(active));else list()[at]=clone(active);}drawing=false;await saveRemote(false);toast('Draft berhasil disimpan ke Google Sheets dan Drive.');return;}
+    if(action==='submit'){
+      if(isLocked()){if(user.role==='Penguji')state.view=owner()==='master'?'pieces':'penguji';active=null;render();return;}
+      if(active){if(!collect())return;const at=list().findIndex(v=>v.id===active.id);if(at<0)list().push(clone(active));else list()[at]=clone(active);}
+      if(!list().length&&!state[owner()==='master'?'noMaster':'noStudent']){toast('Tambahkan indikasi atau pilih Tidak ditemukan indikasi.');return;}
+      drawing=false;await saveRemote(true);toast(owner()==='student'?'Laporan berhasil dikirim. Menunggu evaluasi. ID: '+loaded.student.id:'Kunci berhasil diterbitkan. ID: '+loaded.master.id);if(owner()==='master'){state.view='pieces';render();}return;
+    }
+    if(action==='edit-indication'||action==='reopen'){
+      const which=owner(),id=btn.dataset.id||active?.id;
+      if(loaded[which]&&loaded[which].userId!==user.userId){toast('Hanya pemilik laporan yang dapat mengedit.');return;}
+      if(isLocked()){
+        reviseSource[which]=loaded[which].id;loaded[which]=null;state[which==='master'?'published':'submitted']=false;
+        await saveRemote(false);
+        toast('Draft revisi baru dibuat. Laporan sebelumnya tetap tersimpan.');
+      }
+      choose(id||list()[0]?.id);render();openDetails();return;
+    }
+    if(action==='clear-strokes'&&active&&!isLocked()){captureForm();active.strokes=[];currentStroke=null;drawing=true;render();return;}
+    if(action==='cancel-edit'){choose(active?.id);render();return;}
+    if(action==='upload'||action==='camera'){captureForm();fileTarget=btn.dataset.owner;const input=root.querySelector(action==='camera'?'#mt-camera':'#mt-file');input.value='';input.click();return;}
+    if(action==='rotate-photo'){await rotatePhoto(btn.dataset.owner,Number(btn.dataset.direction)===-1?-1:1);return;}
+    if(action==='remove-photo'){photos[btn.dataset.owner]=null;render();toast('Foto dilepas dari pratinjau laporan.');return;}
+    if(action==='zoom-photo'){photoExpanded[btn.dataset.owner]=!photoExpanded[btn.dataset.owner];render();return;}
+    if(action==='save-review'){state.note=root.querySelector('#mt-review-note').value;state.result=root.querySelector('#mt-result').value;if(state.result==='Perlu Perbaikan'&&!state.note.trim()){toast('Tambahkan catatan perbaikan untuk peserta.');return;}state.feedback=root.querySelector('#mt-publish-feedback').checked;
+      if(!loaded.student)throw Error('Pilih laporan peserta dahulu.');busy=true;
+      try{loaded.student=await api('evaluate',{id:loaded.student.id,revision:loaded.student.revision,keyId:loaded.master?.id||null,result:state.result,note:state.note,pairs:state.pairs,published:state.feedback});await refreshRecords();}finally{busy=false;render();}
+      toast('Evaluasi berhasil disimpan'+(state.feedback?' dan catatan tersedia untuk peserta.':'.'));}
+  }catch(e){busy=false;toast((e.message||String(e))+' Perubahan yang belum tersimpan tetap ada di halaman ini; coba Simpan draft kembali.');}});
+  root.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(e.target.id==='mt-admin-form'){await commitAdmin('save');return;}
+    if(e.target.id==='mt-dimensions-form'){
+      if(busy||isLocked())return;
+      try{const next={};for(const key of ['length','width','thickness']){const raw=e.target.elements.namedItem(key).value.trim();if(!/^\d+(?:[.,]\d{1,2})?$/.test(raw))throw Error('Isi dimensi dengan angka, maksimal 2 desimal.');next[key]=Number(raw.replace(',','.'));}validateDimensions(next);
+        if(list().some(i=>Number(i.fromY)>next.length)||active&&active.fromY!==''&&Number(String(active.fromY).replace(',','.'))>next.length)throw Error('Panjang test piece lebih kecil dari From Y indikasi. Perbaiki posisi indikasi dahulu.');
+        captureForm();dimensions[owner()]=next;dimensionsApplied[owner()]=true;dimensionsEditing[owner()]=false;draftSaved=false;dimensionDialog?.close();render();toast('Dimensi diterapkan. Tekan Simpan draft atau Kirim untuk menyimpan ke server.');
+      }catch(error){const el=e.target.querySelector('#mt-dimension-error');el.textContent=error.message;el.hidden=false;}return;
+    }
+    if(e.target.id==='mt-batch-form'){
+      if(busy)return;const form=e.target,submit=form.querySelector('button'),errorEl=form.querySelector('#mt-batch-error');busy=true;submit.disabled=true;errorEl.hidden=true;
+      try{await api('addBatch',{id:form.elements.namedItem('batchId').value,label:form.elements.namedItem('label').value});reviewerPaneDrafts.batches={batchId:'',label:''};await refreshBatches();busy=false;render();toast('Batch berhasil ditambahkan. Peserta dapat memilihnya pada tab Data.');}
+      catch(error){errorEl.textContent=error.message;errorEl.hidden=false;}finally{busy=false;submit.disabled=false;}return;
+    }
+    if(e.target.id==='mt-piece-form'){
+      if(busy)return;const form=e.target,submit=form.querySelector('button'),errorEl=form.querySelector('#mt-piece-error');busy=true;submit.disabled=true;errorEl.hidden=true;
+      let committed=false;try{await api('addTestPiece',{id:form.elements.namedItem('pieceId').value,label:form.elements.namedItem('label').value});committed=true;testPieceDialog?.close();await refreshPieces();await refreshRecords();busy=false;render();toast('Test Piece berhasil ditambahkan.');}
+      catch(error){if(committed){busy=false;render();toast('Test Piece sudah ditambahkan. Tekan Muat ulang untuk memperbarui daftar.');}else{errorEl.textContent=error.message;errorEl.hidden=false;}}finally{busy=false;submit.disabled=false;}return;
+    }
+    if(e.target.id!=='mt-reviewer-form'||busy)return;
+    const form=e.target,submit=form.querySelector('button[type="submit"]'),errorEl=form.querySelector('#mt-reviewer-error');
+    busy=true;submit.disabled=true;submit.textContent='Memeriksa…';errorEl.hidden=true;
+    try{
+      const result=await api('reviewerLogin',{password:form.elements.namedItem('password').value});
+      persist();rememberGuest();resetWorking();user=result.user;token=result.token;state.view='penguji';rememberReviewerSession();
+      reviewerDialog.close();form.reset();await refreshRecords();
+    }catch(error){errorEl.textContent=error.message;errorEl.hidden=false;}
+    finally{busy=false;submit.disabled=false;submit.textContent='Masuk';if(!reviewerDialog.open)render();}
+  });
+  root.addEventListener('input',event=>{
+    captureForm();captureReviewerPane();
+    if(event.target.id==='mt-piece')currentPiece=event.target.value.trim();
+    if(event.target.id==='mt-participant-name'){
+      participantName=event.target.value;
+      const method=root.querySelector('#mt-method');if(method)method.disabled=isLocked()||participantName.trim().length<2;
+      const piece=root.querySelector('#mt-piece');if(piece)piece.disabled=isLocked()||!currentMethod||participantName.trim().length<2;
+    }
+    if(event.target.id==='mt-opacity'){state.opacity=Number(event.target.value);root.querySelector('#mt-opacity-value').textContent=state.opacity+'%';root.querySelector('#mt-overlay-preview [data-layer="student"]').setAttribute('opacity',state.opacity/100);persist();}
+    if(event.target.id==='mt-review-note')state.note=event.target.value;
+    persist();
+  });
+  root.addEventListener('change',async event=>{try{
+    if(['mt-piece-query','mt-piece-key-method','mt-piece-key-status'].includes(event.target.id)){if(event.target.id==='mt-piece-query')pieceQuery=event.target.value;else if(event.target.id==='mt-piece-key-method')pieceKeyMethod=event.target.value;else pieceKeyStatus=event.target.value;render();return;}
+    if(['mt-key-method','mt-key-piece','mt-key-status'].includes(event.target.id)){if(event.target.id==='mt-key-method')keyMethod=event.target.value;else if(event.target.id==='mt-key-piece')keyPiece=event.target.value;else keyStatus=event.target.value;render();return;}
+    if(event.target.id==='mt-batch'){if(!isLocked()){currentBatch=event.target.value;draftSaved=false;persist();}return;}
+    if(event.target.id==='mt-batch-filter'){captureForm();reviewBatch=event.target.value;loaded.student=null;loaded.master=null;state.student=[];state.master=[];photos.student=null;photos.master=null;active=null;drawing=false;render();return;}
+    if(event.target.id==='mt-method'){captureForm();currentMethod=event.target.value;if(state.view==='penguji'){loaded.student=null;loaded.master=null;state.student=[];state.master=[];photos.student=null;photos.master=null;active=null;drawing=false;}else{currentPiece='';}render();persist();return;}
+    if(event.target.id==='mt-piece'){currentPiece=event.target.value.trim();if(state.view==='penguji'){loaded.student=null;loaded.master=null;state.student=[];state.master=[];photos.student=null;photos.master=null;active=null;drawing=false;render();}else{captureForm();render();}persist();return;}
+    if(event.target.id==='mt-record'&&event.target.value){if(busy)return;await openSavedReport(event.target.value);return;}
+
+    if(event.target.dataset.pair){const key=event.target.dataset.pair,value=event.target.value;Object.keys(state.pairs).forEach(k=>{if(k!==key&&state.pairs[k]===value)state.pairs[k]='';});state.pairs[key]=value;render();persist();}
+    if(event.target.id==='mt-no-indications'){state[owner()==='master'?'noMaster':'noStudent']=event.target.checked;persist();}
+    if(event.target.id==='mt-result')state.result=event.target.value;
+  }catch(e){toast(e.message);}});
+  for(const input of root.querySelectorAll('input[type="file"]'))input.addEventListener('change',()=>{
+    const file=input.files?.[0];if(!file)return;
+    if(!['image/jpeg','image/png'].includes(file.type)){toast('Pilih foto JPG atau PNG untuk pratinjau ini.');return;}
+    if(file.size>10*1024*1024){toast('Ukuran foto maksimal 10 MB.');return;}
+    const target=fileTarget,reader=new FileReader();reader.onerror=()=>toast('Foto belum dapat dibaca. Silakan pilih ulang.');reader.onload=()=>{const test=new Image();test.onerror=()=>toast('File gambar tidak dapat dibuka.');test.onload=()=>{const canvas=document.createElement('canvas'),scale=Math.min(1,2000/Math.max(test.width,test.height));canvas.width=Math.round(test.width*scale);canvas.height=Math.round(test.height*scale);canvas.getContext('2d').drawImage(test,0,0,canvas.width,canvas.height);const photo=canvas.toDataURL('image/jpeg',.8);if(photo.length>2796200){toast('Foto terlalu besar setelah kompresi. Pilih foto berukuran lebih kecil.');return;}photos[target]=photo;render();toast('Foto siap. Tekan Simpan draft atau Kirim untuk menyimpannya ke Drive.');};test.src=reader.result;};reader.readAsDataURL(file);
+  });
+  function point(e,svg){const r=svg.getBoundingClientRect();return [Math.round(Math.max(0,Math.min(1,((e.clientX-r.left)*760/r.width-plate.x)/plate.w))*1000)/1000,Math.round(Math.max(0,Math.min(1,((e.clientY-r.top)*440/r.height-plate.y)/plate.h))*1000)/1000];}
+  function updateDrawing(svg){const preview=svg.querySelector('.mt-draft-strokes');const exists=list().some(v=>v.id===active.id);if(exists){const old=svg.querySelector(`[data-select="${active.id}"]`);if(old)old.remove();}preview.innerHTML=mark(active,'','var(--mt-accent)',false,false,true);}
+  root.addEventListener('pointerdown',e=>{const svg=e.target.closest('svg[data-editor]');if(!svg||!drawing||!active||isLocked())return;e.preventDefault();svg.setPointerCapture(e.pointerId);const p=point(e,svg);currentStroke=[p,[Math.min(1,p[0]+.001),Math.min(1,p[1]+.001)]];active.strokes.push(currentStroke);updateDrawing(svg);});
+  root.addEventListener('pointermove',e=>{if(!currentStroke||!drawing)return;const svg=root.querySelector('svg[data-editor]');if(!svg)return;const p=point(e,svg),last=currentStroke[currentStroke.length-1];if(Math.hypot(p[0]-last[0],p[1]-last[1])>.004&&currentStroke.length<200)currentStroke.push(p);updateDrawing(svg);});
+  function endStroke(){if(!currentStroke)return;currentStroke=null;const undo=root.querySelector('[data-action="undo"]');if(undo)undo.disabled=false;persist();}
+  root.addEventListener('pointerup',endStroke);root.addEventListener('pointercancel',endStroke);
+  content.addEventListener('pointerdown',reviewerSwipeStart);
+  content.addEventListener('pointermove',reviewerSwipeMove);
+  content.addEventListener('pointerup',reviewerSwipeEnd);
+  content.addEventListener('pointercancel',()=>{reviewerSwipe=null;});
+  const observer=new ResizeObserver(resizeLabels);observer.observe(root);
+  try{const saved=JSON.parse(sessionStorage.getItem('mt-guest-session')||'null');if(saved?.user?.guest&&saved.user.role==='Peserta'&&typeof saved.token==='string'){user=saved.user;token=saved.token;participantName=user.nama;}}catch(e){}
+  window.addEventListener('beforeunload',()=>{captureForm();persist();});
+  window.addEventListener('pagehide',()=>{captureForm();persist();});
+  async function initializeApplication(){
+    const savedReviewer=readReviewerSession();let resumed=false;
+    if(savedReviewer){content.innerHTML='<section class="mt-box mt-form" role="status">Memulihkan sesi penguji…</section>';try{resumed=await restoreReviewerSession(savedReviewer);}catch(error){render();toast('Sesi penguji belum dapat diperiksa. Periksa koneksi lalu refresh.');return;}}
+    const recoveredDraft=resumed?null:restoreDraft();
+    if(resumed&&state.view==='kunci'&&!savedReviewer.reportId)state.view='pieces';
+    render();if(recoveredDraft?.dialogOpen&&active&&!drawing)openDetails();if(recoveredDraft)toast('Draft dipulihkan setelah refresh.');
+    if(savedReviewer&&!resumed)toast('Sesi penguji sudah berakhir. Pilih Penguji untuk masuk kembali.');
+    try{
+      await Promise.all([refreshBatches(),refreshPieces()]);await refreshRecords();
+      if(resumed&&savedReviewer.reportId&&['penguji','kunci'].includes(state.view)){
+        const expected=state.view==='kunci'?'master':'student',found=records.find(r=>r.id===savedReviewer.reportId&&r.kind===expected);
+        if(found)applyDocument(await api('load',{id:found.id}));else if(state.view==='kunci')state.view='pieces';
+      }
+      render();if(recoveredDraft?.dialogOpen&&active&&!drawing)openDetails();
+    }catch(error){toast('Data halaman tetap ada. Daftar server belum bisa dimuat: '+error.message);}
+  }
+  initializeApplication();
+})();
+</script>
+</body></html>
